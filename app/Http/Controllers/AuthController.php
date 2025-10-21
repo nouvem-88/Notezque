@@ -31,6 +31,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $email = $request->email;
+        
         $password = $request->password;
         $savedPassword = session('user_password', $this->defaultPassword);
 
@@ -47,6 +48,16 @@ class AuthController extends Controller
             ]);
 
             return redirect('/dashboard');
+        } else if ($email === 'admin@notezque.org' && $password === "admin") {
+            session([
+                'admin' => [
+                    'name' => 'admin',
+                    'username' => 'admin',
+                    'email' => 'admin@notezque.org',
+                    'role' => 'admin'
+                ]
+            ]);
+            return redirect('/admin/dashboard');
         }
 
         return back()->with('error', 'Email atau password salah!');
