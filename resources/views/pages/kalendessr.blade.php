@@ -163,6 +163,13 @@
 
         <div class="app-container">
 
+            {{-- Menampilkan notifikasi sukses --}}
+            @if(session('status_message'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 w-full" role="alert">
+                    <span class="block sm:inline">{{ session('status_message') }}</span>
+                </div>
+            @endif
+
             <!-- Bagian Kiri: Kalender Utama -->
             <main id="main">
                 <!-- Tombol Tambah Acara -->

@@ -87,8 +87,12 @@ Route::get('/materi', [MateriController::class, 'index'])->name('materi');
 | Tugas Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/tugas', [TugasController::class, 'index'])->name('kelola-tugas');
-
+Route::controller(TugasController::class)->prefix('tugas')->name('tugas.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/', 'store')->name('store');
+    Route::put('/{id}', 'update')->name('update');
+    Route::delete('/{id}', 'destroy')->name('destroy');
+});
 /*
 |--------------------------------------------------------------------------
 | Admin Routes

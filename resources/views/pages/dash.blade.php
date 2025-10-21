@@ -195,12 +195,19 @@
                             </a>
                         </div>
 
-                        <div class="space-y-2">
-                            <x-event-card 
-                                :activities="$acaraMendatang ?? []" 
-                                :compact="true" 
-                            />
-                        </div>
+                        @if(isset($acaraMendatang) && count($acaraMendatang) > 0)
+                            <div class="space-y-2">
+                                <x-event-card 
+                                    :activities="$acaraMendatang" 
+                                    :compact="true" 
+                                />
+                            </div>
+                        @else
+                            <div class="text-center py-8">
+                                <i data-lucide="calendar-x" class="w-12 h-12 mx-auto text-gray-400 mb-3"></i>
+                                <p class="text-gray-500">Tidak ada acara mendatang</p>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- BAGIAN 3: UPGRADE (Premium Subscription) -->
