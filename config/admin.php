@@ -19,6 +19,7 @@ return [
             'role' => 'Admin',
             'status' => 'Active',
             'tasks_completed' => 45,
+            'collaborations' => 12,
             'joined_date' => '2024-01-15',
             'last_login' => '2025-10-20 08:30:00'
         ],
@@ -29,6 +30,7 @@ return [
             'role' => 'User',
             'status' => 'Active',
             'tasks_completed' => 32,
+            'collaborations' => 8,
             'joined_date' => '2024-02-20',
             'last_login' => '2025-10-19 14:20:00'
         ],
@@ -39,6 +41,7 @@ return [
             'role' => 'User',
             'status' => 'Inactive',
             'tasks_completed' => 18,
+            'collaborations' => 3,
             'joined_date' => '2024-03-10',
             'last_login' => '2025-10-10 10:15:00'
         ],
@@ -49,6 +52,7 @@ return [
             'role' => 'Moderator',
             'status' => 'Active',
             'tasks_completed' => 67,
+            'collaborations' => 15,
             'joined_date' => '2024-01-25',
             'last_login' => '2025-10-20 09:45:00'
         ],
@@ -59,6 +63,7 @@ return [
             'role' => 'User',
             'status' => 'Active',
             'tasks_completed' => 23,
+            'collaborations' => 5,
             'joined_date' => '2024-04-05',
             'last_login' => '2025-10-19 16:30:00'
         ],
@@ -69,6 +74,7 @@ return [
             'role' => 'User',
             'status' => 'Active',
             'tasks_completed' => 41,
+            'collaborations' => 10,
             'joined_date' => '2024-02-14',
             'last_login' => '2025-10-20 07:00:00'
         ],
@@ -79,6 +85,7 @@ return [
             'role' => 'User',
             'status' => 'Pending',
             'tasks_completed' => 12,
+            'collaborations' => 2,
             'joined_date' => '2024-05-18',
             'last_login' => '2025-10-18 11:20:00'
         ],
@@ -89,6 +96,7 @@ return [
             'role' => 'User',
             'status' => 'Active',
             'tasks_completed' => 56,
+            'collaborations' => 14,
             'joined_date' => '2024-03-22',
             'last_login' => '2025-10-20 10:15:00'
         ]

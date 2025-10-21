@@ -123,7 +123,7 @@ class AuthController extends Controller
             return redirect('/login');
         }
 
-        return view('dashboard.index');
+        return view('pages.dash');
     }
 
     // -------------------------------

@@ -1,4 +1,4 @@
-@extends('layouts.sidenav')
+@extends('layouts.main-nav')
 
 @section('title', 'Dashboard')
 @section('content')

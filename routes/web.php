@@ -24,7 +24,7 @@ Route::get('/', [LandingController::class, 'index'])->name('landing');
 |--------------------------------------------------------------------------
 */
 Route::middleware(['web'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
     
     // Kalender Module
     Route::controller(KalenderController::class)->prefix('kalender')->name('kalender.')->group(function () {
