@@ -2,13 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
-    DashboardController,
     LandingController,
     KalenderController,
-    AdminDashboardController,
     AuthController,
     TugasController,
-    MateriController
+    MateriController,
+    CatatanController
 };
 
 /*
@@ -17,22 +16,6 @@ use App\Http\Controllers\{
 |--------------------------------------------------------------------------
 */
 Route::get('/', [LandingController::class, 'index'])->name('landing');
-
-/*
-|--------------------------------------------------------------------------
-| User Routes
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['web'])->group(function () {
-    
-    
-    // Kalender Module
-    Route::controller(KalenderController::class)->prefix('kalender')->name('kalender.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::post('/', 'store')->name('store');
-        Route::post('/delete', 'delete')->name('delete');
-    });
-});
 
 // Login
 Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
@@ -49,60 +32,40 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name
 Route::get('/change-password', [AuthController::class, 'changePasswordPage'])->name('change');
 Route::post('/change-password', [AuthController::class, 'changePassword'])->name('change.post');
 
-// Logout
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+// Protected Routes (requires authentication)
+Route::middleware('auth')->group(function () {
+    // Logout
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// -------------------------------
-// 🔹 Dashboard (Butuh Login)
-// -------------------------------
-Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+    // Dashboard
+    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
-// Catatan
-Route::get('/catatan', function () {
-    return view('catatan.index');
-})->name('catatan');
+    // Profile
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
 
-// -------------------------------
-// 🔹 Profil Dinamis
-// -------------------------------
-Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    // Catatan Routes
+    Route::get('/catatan', [CatatanController::class, 'index'])->name('catatan');
+    Route::post('/catatan/tambah', [CatatanController::class, 'store'])->name('catatan.store');
+    Route::post('/catatan/edit/{id}', [CatatanController::class, 'update'])->name('catatan.update');
+    Route::get('/catatan/hapus/{id}', [CatatanController::class, 'destroy'])->name('catatan.delete');
 
-use App\Http\Controllers\CatatanController;
+    // Tugas Routes
+    Route::controller(TugasController::class)->prefix('tugas')->name('tugas.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{id}', 'update')->name('update');
+        Route::patch('/{id}/complete', 'complete')->name('complete');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
 
-// Catatan (tanpa database, pakai session)
-Route::get('/catatan', [CatatanController::class, 'index'])->name('catatan');
-Route::post('/catatan/tambah', [CatatanController::class, 'store'])->name('catatan.store');
-Route::post('/catatan/edit/{id}', [CatatanController::class, 'update'])->name('catatan.update');
-Route::get('/catatan/hapus/{id}', [CatatanController::class, 'destroy'])->name('catatan.delete');
+    // Kalender Routes
+    Route::controller(KalenderController::class)->prefix('kalender')->name('kalender.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
 
-/*
-|--------------------------------------------------------------------------
-| Materi Routes
-|--------------------------------------------------------------------------
-*/
-Route::get('/materi', [MateriController::class, 'index'])->name('materi');
-
-/*
-|--------------------------------------------------------------------------
-| Tugas Routes
-|--------------------------------------------------------------------------
-*/
-Route::controller(TugasController::class)->prefix('tugas')->name('tugas.')->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::post('/', 'store')->name('store');
-    Route::put('/{id}', 'update')->name('update');
-    Route::delete('/{id}', 'destroy')->name('destroy');
+    // Materi Routes
+    Route::get('/materi', [MateriController::class, 'index'])->name('materi');
 });
-/*
-|--------------------------------------------------------------------------
-| Admin Routes
-|--------------------------------------------------------------------------
-*/
-Route::controller(AdminDashboardController::class)->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', 'index')->name('dashboard');
-    Route::get('/users', 'users')->name('users');
-    Route::get('/content', 'content')->name('content');
-    Route::get('/statistics', 'statistics')->name('statistics');
-});
-
-

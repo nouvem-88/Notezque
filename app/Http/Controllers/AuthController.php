@@ -2,24 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    private $defaultEmail = 'user@notezque.test';
-    private $defaultPassword = 'password123';
-    private $defaultUsername = 'notezque_user';
-    private $defaultName = 'User NotezQu';
-
-    public function __construct()
-    {
-        // Simpan password default ke session kalau belum ada
-        if (!session()->has('user_password')) {
-            session(['user_password' => $this->defaultPassword]);
-        }
-    }
-
     // -------------------------------
     // LOGIN
     // -------------------------------
@@ -30,37 +19,19 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $email = $request->email;
-        
-        $password = $request->password;
-        $savedPassword = session('user_password', $this->defaultPassword);
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        // Cek login sederhana
-        if ($email === $this->defaultEmail && $password === $savedPassword) {
-            // Simpan info user ke session (pastikan email string tunggal)
-            session([
-                'user' => [
-                    'name' => $this->defaultName,
-                    'username' => $this->defaultUsername,
-                    'email' => $this->defaultEmail,
-                    'role' => 'User Default',
-                ]
-            ]);
-
-            return redirect('/dashboard');
-        } else if ($email === 'admin@notezque.org' && $password === "admin") {
-            session([
-                'admin' => [
-                    'name' => 'admin',
-                    'username' => 'admin',
-                    'email' => 'admin@notezque.org',
-                    'role' => 'admin'
-                ]
-            ]);
-            return redirect('/admin/dashboard');
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/dashboard');
         }
 
-        return back()->with('error', 'Email atau password salah!');
+        return back()->withErrors([
+            'email' => 'Email atau password salah!',
+        ])->onlyInput('email');
     }
 
     // -------------------------------
@@ -73,8 +44,22 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // Simulasi register (belum nyimpen ke database)
-        return redirect('/login')->with('success', 'Registrasi berhasil! Silakan login.');
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect('/dashboard')->with('success', 'Registrasi berhasil!');
     }
 
     // -------------------------------
@@ -87,14 +72,18 @@ class AuthController extends Controller
 
     public function forgotPassword(Request $request)
     {
-        $email = $request->email;
+        $request->validate([
+            'email' => 'required|email',
+        ]);
 
-        if ($email !== $this->defaultEmail) {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
             return back()->with('error', 'Email tidak ditemukan!');
         }
 
-        // Simulasi konfirmasi email
-        session(['reset_email_verified' => true]);
+        // Simpan email untuk proses reset
+        session(['reset_email' => $request->email]);
         return redirect('/change-password')->with('info', 'Email terverifikasi! Silakan ubah kata sandi.');
     }
 
@@ -103,7 +92,7 @@ class AuthController extends Controller
     // -------------------------------
     public function changePasswordPage()
     {
-        if (!session()->has('reset_email_verified')) {
+        if (!session()->has('reset_email')) {
             return redirect('/forgot-password')->with('error', 'Akses ditolak. Harap verifikasi email dulu.');
         }
 
@@ -112,16 +101,22 @@ class AuthController extends Controller
 
     public function changePassword(Request $request)
     {
-        $newPass = $request->new_password;
-        $confirm = $request->confirm_password;
+        $request->validate([
+            'new_password' => 'required|min:6',
+            'confirm_password' => 'required|same:new_password',
+        ]);
 
-        if ($newPass !== $confirm) {
-            return back()->with('error', 'Konfirmasi password tidak sama!');
+        $user = User::where('email', session('reset_email'))->first();
+
+        if (!$user) {
+            return redirect('/login')->with('error', 'User tidak ditemukan!');
         }
 
-        // Simpan password baru ke session
-        session(['user_password' => $newPass]);
-        session()->forget('reset_email_verified');
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        session()->forget('reset_email');
 
         return redirect('/login')->with('success', 'Kata sandi berhasil diubah!');
     }
@@ -131,27 +126,27 @@ class AuthController extends Controller
     // -------------------------------
     public function dashboard()
     {
-        if (!session()->has('user')) {
+        $user = Auth::user();
+
+        if (!$user) {
             return redirect('/login');
         }
 
-        // Ambil data aktivitas dari session atau config
-        $all_aktivitas = Session::get('mock_aktivitas', config('users.aktivitas'));
+        // Ambil aktivitas terdekat milik user
+        $acaraMendatang = $user->activities()
+            ->orderBy('date')
+            ->orderBy('time')
+            ->take(3)
+            ->get();
 
-        // Ambil semua acara dan urutkan berdasarkan tanggal (terdekat dulu)
-        $acaraMendatang = collect($all_aktivitas)
-            ->sortBy(function ($item) {
-                // Urutkan berdasarkan tanggal dan waktu
-                return $item['date'] . ' ' . ($item['time'] ?? '00:00');
-            })
-            ->take(3) // Batasi maksimal 3 acara untuk dashboard
-            ->values() // Reset array keys agar berurutan dari 0
-            ->toArray(); // Convert ke array untuk komponen
+        // Ambil semua aktivitas untuk kalender
+        $semua_aktivitas = $user->activities()
+            ->orderBy('date')
+            ->get();
 
-        // Kirim data yang sudah difilter dan diurutkan ke view
         return view('pages.dash', [
             'acaraMendatang' => $acaraMendatang,
-            'semua_aktivitas' => $all_aktivitas, // Untuk komponen kalender
+            'semua_aktivitas' => $semua_aktivitas,
         ]);
     }
 
@@ -160,15 +155,10 @@ class AuthController extends Controller
     // -------------------------------
     public function profile()
     {
-        $user = session('user');
+        $user = Auth::user();
 
-        if (!$user || !is_array($user)) {
+        if (!$user) {
             return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
-        }
-
-        // Pastikan email tetap string (bukan array)
-        if (is_array($user['email'])) {
-            $user['email'] = $user['email'][0] ?? '';
         }
 
         return view('pages.profile', compact('user'));
@@ -177,9 +167,12 @@ class AuthController extends Controller
     // -------------------------------
     // LOGOUT
     // -------------------------------
-    public function logout()
+    public function logout(Request $request)
     {
-        session()->forget(['user', 'user_password', 'reset_email_verified']);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/login')->with('info', 'Kamu sudah logout.');
     }
 }

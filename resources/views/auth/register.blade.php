@@ -3,35 +3,82 @@
 @section('title', 'Daftar Akun | Notezque')
 
 @section('content')
-<div class="flex justify-center items-center min-h-[80vh]">
-  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-    <h2 class="text-2xl font-bold text-center text-v4-text mb-2">Buat Akun Baru</h2>
-    <p class="text-gray-500 text-center mb-6">Daftar untuk mulai menggunakan Notezque.</p>
-
-    <form action="{{ url('/login') }}" method="GET">
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-600">Nama</label>
-        <input type="text" required class="mt-1 w-full border rounded-lg px-4 py-2 focus:ring-v4-primary focus:outline-none">
+<div class="flex justify-center items-center min-h-screen py-12 px-4">
+  <div class="w-full max-w-md">
+    <!-- Logo/Brand -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-2xl mb-4 shadow-lg">
+        <i data-lucide="user-plus" class="w-8 h-8 text-white"></i>
       </div>
+      <h1 class="text-3xl font-bold text-slate-800 mb-2">Mulai Bersama Notezque</h1>
+      <p class="text-slate-600">Buat akun untuk memulai perjalanan belajar Anda</p>
+    </div>
 
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-600">Email</label>
-        <input type="email" required class="mt-1 w-full border rounded-lg px-4 py-2 focus:ring-v4-primary focus:outline-none">
-      </div>
+    <!-- Register Card -->
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-10">
+      <form action="{{ url('/login') }}" method="GET" class="space-y-6">
+        
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i data-lucide="user" class="w-5 h-5 text-slate-400"></i>
+            </div>
+            <input type="text" name="name" required 
+              class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-shadow" 
+              placeholder="Masukkan nama lengkap">
+          </div>
+        </div>
 
-      <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-600">Kata Sandi</label>
-        <input type="password" required class="mt-1 w-full border rounded-lg px-4 py-2 focus:ring-v4-primary focus:outline-none">
-      </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i data-lucide="mail" class="w-5 h-5 text-slate-400"></i>
+            </div>
+            <input type="email" name="email" required 
+              class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-shadow" 
+              placeholder="nama@email.com">
+          </div>
+        </div>
 
-      <button type="submit" class="w-full bg-v4-primary text-white py-2 rounded-lg hover:opacity-90 transition">
-        Daftar Sekarang
-      </button>
-    </form>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Kata Sandi</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i data-lucide="lock" class="w-5 h-5 text-slate-400"></i>
+            </div>
+            <input type="password" name="password" required 
+              class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-shadow" 
+              placeholder="Minimal 8 karakter">
+          </div>
+          <p class="mt-2 text-xs text-slate-500">Gunakan minimal 8 karakter dengan kombinasi huruf dan angka</p>
+        </div>
 
-    <p class="text-sm text-center text-gray-500 mt-6">
-      Sudah punya akun? <a href="{{ url('/login') }}" class="text-v4-primary font-semibold hover:underline">Masuk di sini</a>
+        <div class="flex items-start pt-2">
+          <input type="checkbox" required class="w-4 h-4 mt-0.5 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500">
+          <label class="ml-3 text-sm text-slate-600">
+            Saya setuju dengan <a href="#" class="text-cyan-600 hover:text-cyan-700 hover:underline font-medium">Syarat & Ketentuan</a> dan <a href="#" class="text-cyan-600 hover:text-cyan-700 hover:underline font-medium">Kebijakan Privasi</a>
+          </label>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-3.5 rounded-lg font-semibold hover:from-cyan-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
+          Buat Akun
+        </button>
+      </form>
+    </div>
+
+    <!-- Login Link -->
+    <p class="text-sm text-center text-slate-600 mt-8">
+      Sudah punya akun? <a href="{{ url('/login') }}" class="text-cyan-600 font-semibold hover:text-cyan-700 hover:underline">Masuk di sini</a>
     </p>
   </div>
 </div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  });
+</script>
 @endsection

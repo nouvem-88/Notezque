@@ -161,38 +161,68 @@
     <div class="abstract-blur-pastel blur-blue-pastel"></div>
 
     <!-- Navigasi Bar -->
-    <header class="bg-v4-surface/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm border-b border-gray-100">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            
-            <!-- Logo Notezque (Menggunakan gambar yang diunggah) -->
-            <a href="/" class="flex items-center space-x-2 text-xl font-bold text-v4-text">
-                <img src="{{ url('logo.png') }}" alt="Notezque Logo" class="h-10 w-auto"/>
-                <span class="text-v4-text hidden sm:inline">Notezque</span>
-            </a>
-
-            <div class="hidden md:flex space-x-8 items-center text-v4-text">
-                <a href="#fitur" class="text-sm font-medium hover:text-v4-primary transition duration-150">Fitur Utama</a>
-                <a href="#alur" class="text-sm font-medium hover:text-v4-primary transition duration-150">Alur Kerja</a>
-                <a href="#pengembangan" class="text-sm font-medium hover:text-v4-primary transition duration-150">Roadmap</a>
-                <a href="#" class="px-5 py-2 text-sm font-semibold primary-button-pastel rounded-full shadow-md">
-                    Akses Sistem &rarr;
+    <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200/50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo Notezque -->
+                <a href="/" class="flex items-center space-x-3 group">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                        <img src="{{ url('logo.png') }}" alt="Notezque Logo" class="relative h-11 w-auto transition-transform duration-300 group-hover:scale-105"/>
+                    </div>
+                    <div class="hidden sm:block">
+                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Notezque</span>
+                        <p class="text-[10px] text-slate-500 font-medium -mt-1">Productivity Hub</p>
+                    </div>
                 </a>
-            </div>
 
-            <!-- Mobile Menu Button -->
-            <button class="md:hidden text-v4-text p-2 rounded-md hover:bg-gray-100 transition duration-150" id="mobile-menu-button-v4">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#fitur" class="text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors relative group">
+                        Fitur Utama
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600 group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                    <a href="#alur" class="text-sm font-medium text-slate-700 hover:text-blue-700 transition-colors relative group">
+                        Alur Kerja
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-700 to-sky-600 group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                    <a href="#pengembangan" class="text-sm font-medium text-slate-700 hover:text-cyan-600 transition-colors relative group">
+                        Roadmap
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-600 to-blue-500 group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                    <a href="{{ url('/login') }}" 
+                       class="px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+                        Akses Sistem
+                        <svg class="inline-block w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2.5 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors" id="mobile-menu-button-v4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+                    </svg>
+                </button>
+            </div>
         </nav>
 
         <!-- Mobile Menu -->
-        <div class="md:hidden hidden bg-v4-surface border-t border-gray-100" id="mobile-menu-v4">
-            <div class="px-4 pt-2 pb-3 space-y-1">
-                <a href="#fitur" class="block px-3 py-2 rounded-md text-base font-medium text-v4-text hover:bg-gray-100">Fitur Utama</a>
-                <a href="#alur" class="block px-3 py-2 rounded-md text-base font-medium text-v4-text hover:bg-gray-100">Alur Kerja</a>
-                <a href="#pengembangan" class="block px-3 py-2 rounded-md text-base font-medium text-v4-text hover:bg-gray-100">Roadmap</a>
-                <a href="#" class="block px-3 py-2 text-base font-semibold primary-button-pastel rounded-full text-center mt-2">
-                    Akses Sistem &rarr;
+        <div class="md:hidden hidden bg-white/95 backdrop-blur-lg border-t border-slate-200/50" id="mobile-menu-v4">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                <a href="#fitur" class="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    Fitur Utama
+                </a>
+                <a href="#alur" class="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-600 transition-colors">
+                    Alur Kerja
+                </a>
+                <a href="#pengembangan" class="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-sky-50 hover:text-sky-600 transition-colors">
+                    Roadmap
+                </a>
+                <a href="{{ url('/login') }}" 
+                   class="block px-4 py-3 text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-center mt-3 shadow-md hover:shadow-lg transition-all">
+                    Akses Sistem →
                 </a>
             </div>
         </div>
@@ -204,52 +234,25 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-v4-surface pt-16 pb-8 border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-200 pb-10 mb-8">
-                <!-- Logo & Deskripsi -->
-                <div class="col-span-2 md:col-span-2">
-                     <div class="flex items-center space-x-2 mb-3 text-v4-text">
-                        <!-- Logo Footer -->
-                        <img src="{{ url('logo.png') }}" alt="Notezque Logo" class="h-10 w-auto"/>
-                        <h3 class="text-3xl font-extrabold">Notezque</h3>
-                    </div>
-                    <p class="text-sm text-gray-500">
-                        Platform Manajemen Tugas & Produktivitas Akademik Generasi Baru.
+    <footer class="bg-gradient-to-r from-slate-50 via-white to-slate-50 py-4 border-t border-slate-200/60 w-full backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <!-- Copyright -->
+                <div class="text-center sm:text-left">
+                    <p class="text-xs text-slate-600 font-medium">
+                        &copy; 2025 <span class="font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Notezque</span>. All Rights Reserved.
                     </p>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Platform Manajemen Tugas dan Produktivitas Akademik</p>
                 </div>
-                <!-- Navigasi Cepat -->
-                <div>
-                    <h4 class="text-lg font-bold mb-4 text-v4-text">Navigasi</h4>
-                    <ul class="space-y-2 text-gray-500 text-sm">
-                        <li><a href="#fitur" class="hover:text-v4-primary transition duration-150">Fitur Inti</a></li>
-                        <li><a href="#alur" class="hover:text-v4-primary transition duration-150">Alur Kerja</a></li>
-                        <li><a href="#pengembangan" class="hover:text-v4-primary transition duration-150">Roadmap</a></li>
-                    </ul>
+                
+                <!-- Quick Links -->
+                <div class="flex items-center gap-4 text-xs">
+                    <a href="#" class="text-slate-500 hover:text-blue-600 font-medium transition-colors">Bantuan</a>
+                    <span class="text-slate-300">•</span>
+                    <a href="#" class="text-slate-500 hover:text-cyan-600 font-medium transition-colors">Kebijakan Privasi</a>
+                    <span class="text-slate-300">•</span>
+                    <a href="#" class="text-slate-500 hover:text-blue-600 font-medium transition-colors">Tentang</a>
                 </div>
-                <!-- Layanan -->
-                <div>
-                    <h4 class="text-lg font-bold mb-4 text-v4-text">Produk</h4>
-                    <ul class="space-y-2 text-gray-500 text-sm">
-                        <li><a href="#" class="hover:text-v4-primary transition duration-150">Task Manager</a></li>
-                        <li><a href="#" class="hover:text-v4-primary transition duration-150">Academic Calendar</a></li>
-                        <li><a href="#" class="hover:text-v4-primary transition duration-150">Team Collaboration</a></li>
-                    </ul>
-                </div>
-                <!-- Sosial & Kontak -->
-                <div>
-                    <h4 class="text-lg font-bold mb-4 text-v4-text">Sosial</h4>
-                    <ul class="space-y-2 text-gray-500 text-sm">
-                        <li><a href="#" class="hover:text-v4-primary transition duration-150">LinkedIn</a></li>
-                        <li><a href="#" class="hover:text-v4-primary transition duration-150">Instagram</a></li>
-                        <li><a href="#" class="hover:text-v4-primary transition duration-150">Support</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Copyright -->
-            <div class="text-center text-sm text-gray-400 mt-8">
-                &copy; 2025 Notezque. All Rights Reserved.
             </div>
         </div>
     </footer>

@@ -1,534 +1,642 @@
 @extends('layouts.main-nav')
 
-@section('title', 'Kalender')
-
 @section('content')
-    <!DOCTYPE html>
-    <html lang="id">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>NotezQue - Kalender Aktivitas</title>
-        <!-- Tailwind CSS CDN -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <!-- Iconify CDN for the icons -->
-        <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
-        <!-- Alpine.js CDN for interactive components -->
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <style>
-            /* Menggunakan font Inter dan memastikan tampilan dasar bagus */
-            body {
-                font-family: 'Inter', sans-serif;
-                background-color: #f3f4f6;
-                /* Warna latar belakang abu-abu terang */
-            }
-
-            /* Container utama app */
-            .app-container {
-                display: flex;
-                gap: 2rem;
-                padding: 2rem;
-                max-width: 1400px;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-
-            #main {
-                flex: 2;
-                min-width: 350px;
-            }
-
-            .side-listAcara {
-                flex: 1;
-                min-width: 350px;
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            /* Side Modal Styling (Detail Acara) */
-            .side-modal {
-                position: fixed;
-                top: 0;
-                right: 0;
-                height: 100%;
-                width: 380px;
-                max-width: 90vw;
-                background-color: #fff;
-                box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
-                transform: translateX(100%);
-                transition: transform 0.3s ease-out;
-                z-index: 1000;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .side-modal.open {
-                transform: translateX(0);
-            }
-
-            .side-modal-body {
-                flex-grow: 1;
-                overflow-y: auto;
-                padding: 24px;
-            }
-
-            .side-modal-footer {
-                padding: 16px 24px;
-                border-top: 1px solid #e5e7eb;
-                display: flex;
-                gap: 1rem;
-                justify-content: flex-end;
-                /* Posisikan tombol di kanan */
-            }
-
-            /* Custom styles for calendar cells */
-            .tglBln .tanggal-cell {
-                height: 110px;
-                /* Fixed height for consistency */
-                padding: 4px;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                overflow: hidden;
-                position: relative;
-            }
-
-            .tglBln .date-number {
-                font-weight: 600;
-                margin-bottom: 4px;
-                align-self: flex-start;
-            }
-
-            .tglBln .hari-ini .date-number {
-                 background-color: #2563eb;
-                 color: white;
-                 border-radius: 9999px;
-                 width: 24px;
-                 height: 24px;
-                 display: flex;
-                 align-items: center;
-                 justify-content: center;
-            }
-
-            .events-list-in-cell {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                gap: 2px;
-            }
-
-            .event-marker-in-cell {
-                font-size: 0.7rem;
-                padding: 1px 4px;
-                border-radius: 4px;
-                background-color: #e0e7ff;
-                color: #4338ca;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                border-left: 3px solid #818cf8;
-            }
-
-            .more-events-marker {
-                font-size: 0.7rem;
-                font-weight: bold;
-                color: #1e40af;
-                background-color: #bfdbfe;
-            }
-
-
-            /* Responsif */
-            @media (max-width: 1024px) {
-                .app-container {
-                    flex-direction: column;
-                    padding: 1rem;
-                }
-
-                #main,
-                .side-listAcara {
-                    min-width: 100%;
-                }
-
-                .side-modal {
-                    width: 100%;
-                    /* Penuh di mobile */
-                }
-            }
-        </style>
-    </head>
-
-    <body>
-
-        <div class="app-container">
-
-            {{-- Menampilkan notifikasi sukses --}}
-            @if(session('status_message'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 w-full" role="alert">
-                    <span class="block sm:inline">{{ session('status_message') }}</span>
-                </div>
-            @endif
-
-            <!-- Bagian Kiri: Kalender Utama -->
-            <main id="main">
-                <!-- Tombol Tambah Acara -->
-                <div class="">
-                    <button onclick="openModal('add')"
-                        class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200">
-                        <iconify-icon icon="mdi:plus-circle-outline" class="w-5 h-5"></iconify-icon>
-                        Tambah Acara Baru
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <!-- Kalender Header dengan Navigasi -->
-                    <div class="flex justify-between items-center mb-4">
-                        <button onclick="bulanSebelumnya()" class="p-2 rounded-lg hover:bg-gray-100 transition">
-                            <iconify-icon icon="mdi:chevron-left" class="w-6 h-6 text-gray-700"></iconify-icon>
-                        </button>
-                        <h2 class="text-xl font-bold bln-thn text-gray-800"></h2>
-                        <button onclick="bulanBerikutnya()" class="p-2 rounded-lg hover:bg-gray-100 transition">
-                            <iconify-icon icon="mdi:chevron-right" class="w-6 h-6 text-gray-700"></iconify-icon>
-                        </button>
-                    </div>
-
-                    <!-- Hari dalam Seminggu -->
-                    <div class="grid grid-cols-7 gap-1 text-center font-semibold text-sm text-gray-600 mb-2">
-                        <div>Min</div>
-                        <div>Sen</div>
-                        <div>Sel</div>
-                        <div>Rab</div>
-                        <div>Kam</div>
-                        <div>Jum</div>
-                        <div>Sab</div>
-                    </div>
-
-                    <!-- Grid Tanggal Kalender -->
-                    <div class="grid grid-cols-7 gap-1 tglBln">
-                        <!-- Tanggal akan di-generate oleh JavaScript -->
+<div class="min-h-screen">
+    <main class="flex-grow bg-white rounded-tl-3xl p-6 md:p-10">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header: match Materi style -->
+            <div class="flex flex-wrap justify-between items-center gap-4 mb-8">
+                <div class="flex items-center gap-3">
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-800">Kalender</h2>
+                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
                     </div>
                 </div>
-            </main>
-
-            <!-- Bagian Kanan: Daftar Aktivitas dan Filter -->
-            <aside class="side-listAcara">
-                <div class="bg-white p-6 rounded-xl shadow-lg">
-                <h3 class="text-xl font-bold mb-4 text-gray-800">Daftar Aktivitas Bulan Ini</h3>
-
-                <!-- Filter dan Sort -->
-                <div class="flex justify-between items-center mb-4 gap-2">
-                    <select id="sortFilter" onchange="applySortFilter()"
-                        class="flex-grow p-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500">
-                        <option value="date_asc" {{ request('sort') == 'date_asc' ? 'selected' : '' }}>Tanggal Terdekat</option>
-                        <option value="date_desc" {{ request('sort') == 'date_desc' ? 'selected' : '' }}>Tanggal Terjauh</option>
-                        <option value="title_asc" {{ request('sort') == 'title_asc' ? 'selected' : '' }}>Judul (A-Z)</option>
-                        <option value="title_desc" {{ request('sort') == 'title_desc' ? 'selected' : '' }}>Judul (Z-A)</option>
-                    </select>
-                    <button class="p-2 bg-blue-100 rounded-lg text-blue-600 hover:bg-blue-200 transition" onclick="resetFilter()" title="Reset Filter">
-                        <iconify-icon icon="mdi:refresh"></iconify-icon>
-                    </button>
+            </div>
+    <!-- Main Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Sidebar - Upcoming Events -->
+        <div class="lg:col-span-4 xl:col-span-3">
+            <div class="bg-slate-50 rounded-xl p-4 shadow-sm border border-slate-200">
+                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Upcoming Events</h3>
+                
+                <button onclick="openAddModal()" class="w-full mb-4 p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                    <span class="font-medium">Add Event</span>
+                </button>
+                
+                <!-- Events List -->
+                <div class="space-y-2">
+                    @php
+                        $upcomingEvents = ($aktivitasBulanIni ?? collect())->filter(function($event) {
+                            return \Carbon\Carbon::parse($event->date)->isFuture() || \Carbon\Carbon::parse($event->date)->isToday();
+                        })->sortBy('date')->take(10);
+                    @endphp
+                    
+                    @forelse($upcomingEvents as $event)
+                        <div class="p-4 rounded-xl hover:bg-slate-50 cursor-pointer border border-slate-200 bg-white" onclick="openEditModalById({{ $event->id }})">
+                            <div class="flex items-start justify-between mb-2">
+                                <span class="text-xs font-semibold text-slate-400 uppercase">
+                                    {{ \Carbon\Carbon::parse($event->date)->format('M d, Y') }}
+                                </span>
+                                <span class="text-xs px-2 py-1 rounded-full {{ $event->status === 'selesai' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
+                                    {{ $event->status === 'selesai' ? 'Done' : 'Pending' }}
+                                </span>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-sm mb-1">{{ $event->title }}</h3>
+                            @if($event->desk)
+                                <p class="text-xs text-slate-500 line-clamp-2">{{ $event->desk }}</p>
+                            @endif
+                            @if($event->time)
+                                <p class="text-xs text-slate-400 mt-2">⏰ {{ substr($event->time, 0, 5) }}</p>
+                            @endif
+                        </div>
+                    @empty
+                        <div class="text-center py-8 text-slate-400">
+                            <i data-lucide="calendar-x" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
+                            <p class="text-sm">No upcoming events</p>
+                        </div>
+                    @endforelse
                 </div>
-
-                    <!-- Kontainer Daftar Acara (Scrollable) -->
-                    <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2" id="activity-list-container">
-                            <x-event-card 
-                                :activities="$aktivitasBulanIni ?? []"
-                                :showActions="true"
-                                :showPagination="true"
-                                :itemsPerPage="3"
-                            />
-                    </div>
-                </div>
-            </aside>
+            </div>
         </div>
 
- 
-        <!-- MODAL TAMBAH/EDIT ACARA -->
-        @include('components.event-modal')
-
-
-
-        <!-- SIDE MODAL DETAIL ACARA -->
-        <div id="sideModalDetail" class="side-modal">
-            <!-- Header -->
-            <div class="p-6 border-b flex items-center justify-between bg-blue-50">
-                <h3 class="text-xl font-extrabold text-blue-800" id="sideDetailTitle">Detail Acara</h3>
-                <button onclick="closeSideModal()" class="p-1 rounded-full hover:bg-gray-100">
-                    <iconify-icon icon="mdi:close" class="w-6 h-6 text-gray-500"></iconify-icon>
-                </button>
-            </div>
-
-            <!-- Body Detail -->
-            <div class="side-modal-body space-y-6">
-                <div class="space-y-1">
-                    <strong class="text-sm font-semibold text-gray-500 block">JUDUL AKTIVITAS</strong>
-                    <p id="sideDetailNamaAcara" class="text-2xl font-bold text-gray-800">Judul Acara di Sini</p>
-                </div>
-
-                <div class="space-y-1">
-                    <strong class="text-sm font-semibold text-gray-500 block">DESKRIPSI</strong>
-                    <p id="sideDetailDesc" class="text-gray-600 leading-relaxed italic">Deskripsi lengkap dari acara. Ini
-                        bisa sangat panjang.</p>
-                </div>
-
-                <div class="space-y-4 p-4 bg-gray-50 rounded-lg">
-                    <h4 class="font-bold text-lg text-gray-700 border-b pb-2">Informasi Waktu</h4>
-                    <div class="flex items-center gap-2 text-gray-700">
-                        <strong>
-                            <iconify-icon icon="mdi:calendar-range" width="16" height="16"></iconify-icon>
-                            Tanggal:
-                        </strong>
-                        <p id="sideDetailTanggal">19 Januari 2025</p>
-                    </div>
-                    <div class="flex items-center gap-2 text-gray-700">
-                        <strong>
-                            <iconify-icon icon="mdi:clock-outline" width="16" height="16"></iconify-icon>
-                            Waktu:
-                        </strong>
-                        <p id="sideDetailWaktu">10:00 AM</p>
+        <!-- Right Side - Calendar -->
+        <div class="lg:col-span-8 xl:col-span-9">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <!-- View Tabs -->
+                <div class="flex items-center justify-between mb-4 border-b border-gray-200 pb-4">
+                    <div class="flex gap-2">
+                        <button onclick="calendar.changeView('timeGridDay')" class="view-btn px-4 py-2 rounded-lg text-sm font-medium transition bg-gray-100 text-gray-600 hover:bg-gray-200">Day</button>
+                        <button onclick="calendar.changeView('timeGridWeek')" class="view-btn px-4 py-2 rounded-lg text-sm font-medium transition bg-gray-100 text-gray-600 hover:bg-gray-200">Week</button>
+                        <button onclick="calendar.changeView('dayGridMonth')" class="view-btn active px-4 py-2 rounded-lg text-sm font-medium transition bg-blue-600 text-white">Month</button>
                     </div>
                 </div>
-
-                <div class="space-y-1">
-                    <strong class="text-sm font-semibold text-gray-500 block">REMINDER</strong>
-                    <p id="sideDetailReminder" class="text-gray-600 italic">Reminder disetel 15 menit sebelumnya.</p>
-                </div>
+                
+                <div id="calendar"></div>
             </div>
+        </div>
+    </div>
+        </div>
+    </main>
+</div>
 
-            <!-- Footer Tombol Aksi -->
-            <div class="side-modal-footer">
-                <button id="editSideAcaraBtn"
-                    class="flex items-center gap-1.5 px-4 py-2 bg-yellow-500 text-white font-medium rounded-lg hover:bg-yellow-600 transition duration-150"
-                    onclick="editFromSide()">
-                    <iconify-icon icon="mdi:pencil" width="18" height="18"></iconify-icon>
-                    Edit
-                </button>
-                <button id="hapusSideAcaraBtn"
-                    class="flex items-center gap-1.5 px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition duration-150"
-                    onclick="deleteFromSide()">
-                    <iconify-icon icon="mdi:trash-can-outline" width="18" height="18"></iconify-icon>
-                    Hapus
-                </button>
-            </div>
+<!-- Modal Tambah/Edit Acara -->
+<div id="eventModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-xl">
+        <div class="flex justify-between items-center mb-6">
+            <h3 id="modalTitle" class="text-xl font-bold text-gray-900">Tambah Acara</h3>
+            <button type="button" onclick="closeEventModal()" class="text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
         </div>
         
-        <!-- CUSTOM CONFIRMATION MODAL (Menggantikan window.confirm/alert) -->
-        @include('components.confirm-delete-modal')
-        <script>
-            /**
-             * ===============================================
-             * SISTEM KALENDER AKTIVITAS UTAMA
-             * ===============================================
-             */
+        <form id="eventForm" method="POST" action="{{ route('kalender.store') }}">
+            @csrf
+            <input type="hidden" id="methodInput" name="_method" value="POST">
+            <input type="hidden" id="eventId" name="event_id">
+            
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i data-lucide="type" class="w-4 h-4 inline mr-1"></i>
+                    Judul
+                </label>
+                <input type="text" name="title" id="inputTitle" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan judul acara" required>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i data-lucide="file-text" class="w-4 h-4 inline mr-1"></i>
+                    Deskripsi
+                </label>
+                <textarea name="desk" id="inputDesk" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Tambahkan deskripsi (opsional)"></textarea>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i data-lucide="calendar" class="w-4 h-4 inline mr-1"></i>
+                        Tanggal
+                    </label>
+                    <input type="date" name="date" id="inputDate" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i data-lucide="clock" class="w-4 h-4 inline mr-1"></i>
+                        Waktu
+                    </label>
+                    <input type="time" name="time" id="inputTime" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i data-lucide="check-circle" class="w-4 h-4 inline mr-1"></i>
+                    Status
+                </label>
+                <select name="status" id="inputStatus" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="pending">Pending</option>
+                    <option value="selesai">Selesai</option>
+                </select>
+            </div>
+            
+            <div class="flex gap-3">
+                <button type="submit" class="flex-1 bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 font-medium transition flex items-center justify-center gap-2">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    <span>Simpan</span>
+                </button>
+                <button type="button" id="deleteBtn" onclick="deleteEvent()" class="hidden bg-red-600 text-white px-4 py-2.5 rounded-lg hover:bg-red-700 font-medium transition">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+                <button type="button" onclick="closeEventModal()" class="bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-300 font-medium transition">
+                    Batal
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
-            // ==================== VARIABEL GLOBAL ====================
-            let tanggalHariIni = new Date();
-            let bulanSekarang = tanggalHariIni.getMonth(); // 0-11
-            let tahunSekarang = tanggalHariIni.getFullYear();
-            let idAktivitasYangDilihat = null; // Untuk side modal detail
+<script>
+// Auto reload after form submission to show new events
+document.addEventListener('DOMContentLoaded', function() {
+    const eventForm = document.getElementById('eventForm');
+    if (eventForm) {
+        eventForm.addEventListener('submit', function(e) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 200);
+        });
+    }
+});
+</script>
 
-            // Data utama aplikasi, diisi oleh data dari controller
-            let daftarAktivitas = JSON.parse('{!! $daftarAktivitasJson !!}');
+<!-- FullCalendar CSS -->
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
 
-            // Nama-nama bulan dalam bahasa Indonesia
-            const namaBulan = [
-                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-            ];
+<!-- FullCalendar JS -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/id.global.min.js'></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 
-            // Elemen HTML yang di-cache
-            let tempatTanggal, judulBulanTahun, sideModalDetail;
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
 
-            // ==================== INISIALISASI ====================
-            function ambilElemenHTML() {
-                tempatTanggal = document.querySelector('.tglBln');
-                judulBulanTahun = document.querySelector('.bln-thn');
-                sideModalDetail = document.getElementById('sideModalDetail');
+    // Activities data from controller
+    const activities = @json($aktivitasBulanIni ?? []);
+    
+    // Convert activities to FullCalendar events
+    const events = activities.map(activity => {
+        // Parse date properly - handle both string and object formats
+        let dateStr = activity.date;
+        if (typeof dateStr === 'object' && dateStr.date) {
+            dateStr = dateStr.date.split(' ')[0]; // Get YYYY-MM-DD from timestamp
+        } else if (typeof dateStr === 'string' && dateStr.includes('T')) {
+            dateStr = dateStr.split('T')[0]; // Get YYYY-MM-DD from ISO string
+        }
+        
+        return {
+            id: activity.id,
+            title: activity.title,
+            start: dateStr + (activity.time ? 'T' + activity.time : ''),
+            description: activity.desk,
+            status: activity.status,
+            className: 'fc-event-' + activity.status,
+            backgroundColor: activity.status === 'selesai' ? '#10b981' : '#3b82f6',
+            borderColor: activity.status === 'selesai' ? '#059669' : '#2563eb',
+            extendedProps: {
+                description: activity.desk,
+                status: activity.status
             }
+        };
+    });
 
-            // ==================== FUNGSI UTILITAS (GLOBAL) ====================
-            function formatTanggalTampilan(dateString, timeString = '') {
-                if (!dateString) return 'Tanggal tidak valid';
-                try {
-                    const [year, month, day] = dateString.split('-');
-                    const date = new Date(year, month - 1, day);
-                    if (isNaN(date)) return 'Tanggal tidak valid';
-
-                    const namaBulanIndo = namaBulan[date.getMonth()];
-                    const tanggal = date.getDate();
-                    const tahun = date.getFullYear();
-
-                    let result = `${tanggal} ${namaBulanIndo} ${tahun}`;
-                    if (timeString) {
-                        result += ` pukul ${timeString.substring(0, 5)}`;
-                    }
-                    return result;
-                } catch (e) {
-                    console.error("Error formatting date:", dateString, e);
-                    return dateString; // Fallback
-                }
+    // Initialize FullCalendar
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'id',
+        headerToolbar: {
+            left: 'prev,next',
+            center: 'title',
+            right: ''
+        },
+        buttonText: {
+            today: 'Today',
+            month: 'Month',
+            week: 'Week',
+            day: 'Day'
+        },
+        views: {
+            dayGridMonth: {
+                dayMaxEvents: 2,
+                moreLinkText: 'more'
+            },
+            timeGridWeek: {
+                slotDuration: '01:00:00',
+                slotLabelInterval: '01:00',
+                slotMinTime: '06:00:00',
+                slotMaxTime: '22:00:00',
+                allDaySlot: true,
+                allDayText: 'All Day'
             }
+        },
+        events: events,
+        eventClick: function(info) {
+            info.jsEvent.preventDefault();
+            openEditModal(info.event);
+        },
+        dateClick: function(info) {
+            openAddModal(info.dateStr);
+        },
+        eventMouseEnter: function(info) {
+            info.el.style.transform = 'scale(1.02)';
+            info.el.style.zIndex = '10';
+        },
+        eventMouseLeave: function(info) {
+            info.el.style.transform = 'scale(1)';
+            info.el.style.zIndex = '1';
+        },
+        editable: false,
+        selectable: true,
+        selectMirror: true,
+        dayMaxEvents: true,
+        weekends: true,
+        height: 'auto',
+        aspectRatio: 2,
+        firstDay: 0,
+        nowIndicator: true,
+        eventDisplay: 'block',
+        displayEventTime: true,
+        displayEventEnd: false,
+        slotLabelFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        }
+    });
 
-            // Dibuat global agar bisa diakses dari komponen modal
-            window.findEventById = function(id) {
-                return daftarAktivitas.find(e => e.id == id);
-            }
+    calendar.render();
 
-            // ==================== FUNGSI RENDER UTAMA ====================
-            function tampilkanKalender() {
-                if (!tempatTanggal || !judulBulanTahun) return;
-
-                tempatTanggal.innerHTML = '';
-                judulBulanTahun.textContent = namaBulan[bulanSekarang] + ' ' + tahunSekarang;
-
-                let tglPertama = new Date(tahunSekarang, bulanSekarang, 1);
-                let jmlHariBulanIni = new Date(tahunSekarang, bulanSekarang + 1, 0).getDate();
-                let hariPertamaIndex = tglPertama.getDay(); // 0=Minggu, 6=Sabtu
-                let jmlHariBulanLalu = new Date(tahunSekarang, bulanSekarang, 0).getDate();
-
-                // Kelompokkan acara per hari
-                const eventsPerDay = {};
-                daftarAktivitas.forEach(event => {
-                    const dateObj = new Date(event.date);
-                    if (dateObj.getMonth() === bulanSekarang && dateObj.getFullYear() === tahunSekarang) {
-                        const dayOfMonth = dateObj.getDate();
-                        if (!eventsPerDay[dayOfMonth]) eventsPerDay[dayOfMonth] = [];
-                        eventsPerDay[dayOfMonth].push(event);
-                    }
-                });
-
-                const totalCells = 42;
-                let tglCounter = 1;
-                let tglBulanBerikutnya = 1;
-
-                for (let i = 0; i < totalCells; i++) {
-                    const divTanggal = document.createElement('div');
-                    divTanggal.classList.add('tanggal-cell', 'border', 'border-gray-200');
-
-                    if (i < hariPertamaIndex) {
-                        const tgl = jmlHariBulanLalu - hariPertamaIndex + i + 1;
-                        divTanggal.innerHTML = `<span class="date-number text-gray-400">${tgl}</span>`;
-                        divTanggal.classList.add('bg-gray-50');
-                    } else if (tglCounter <= jmlHariBulanIni) {
-                        const dateString = `${tahunSekarang}-${String(bulanSekarang + 1).padStart(2, '0')}-${String(tglCounter).padStart(2, '0')}`;
-                        divTanggal.innerHTML = `<span class="date-number">${tglCounter}</span>`;
-                        divTanggal.classList.add('cursor-pointer', 'hover:bg-blue-50');
-
-                        const hariIni = new Date();
-                        if (tglCounter === hariIni.getDate() && bulanSekarang === hariIni.getMonth() && tahunSekarang === hariIni.getFullYear()) {
-                            divTanggal.querySelector('.date-number').classList.add('bg-blue-600', 'text-white', 'rounded-full', 'w-6', 'h-6', 'flex', 'items-center', 'justify-center');
-                        }
-
-                        const events = eventsPerDay[tglCounter];
-                        if (events && events.length > 0) {
-                            const eventsContainer = document.createElement('div');
-                            eventsContainer.className = 'events-list-in-cell';
-                            events.slice(0, 3).forEach(evt => {
-                                const eventMarker = document.createElement('div');
-                                eventMarker.className = 'event-marker-in-cell';
-                                eventMarker.textContent = evt.title;
-                                eventMarker.onclick = (e) => { e.stopPropagation(); openSideModalDetail(evt.id); };
-                                eventsContainer.appendChild(eventMarker);
-                            });
-
-                            if (events.length > 3) {
-                                const moreMarker = document.createElement('div');
-                                moreMarker.className = 'more-events-marker';
-                                moreMarker.textContent = `+${events.length - 3} lagi`;
-                                eventsContainer.appendChild(moreMarker);
-                            }
-                            divTanggal.appendChild(eventsContainer);
-                            divTanggal.onclick = () => openSideModalDetail(events[0].id);
-                        } else {
-                            divTanggal.onclick = () => window.openModal('add', dateString);
-                        }
-                        tglCounter++;
-                    } else {
-                        divTanggal.innerHTML = `<span class="date-number text-gray-400">${tglBulanBerikutnya}</span>`;
-                        divTanggal.classList.add('bg-gray-50');
-                        tglBulanBerikutnya++;
-                    }
-                    tempatTanggal.appendChild(divTanggal);
-                }
-            }
-
-
-
-            // ==================== FUNGSI SIDE DETAIL ====================
-            window.openSideModalDetail = function(id) {
-                const event = findEventById(id);
-                if (!event) return;
-
-                idAktivitasYangDilihat = id;
-                document.getElementById('sideDetailNamaAcara').textContent = event.title;
-                document.getElementById('sideDetailDesc').textContent = event.desk || 'Tidak ada deskripsi.';
-                document.getElementById('sideDetailTanggal').textContent = formatTanggalTampilan(event.date);
-                document.getElementById('sideDetailWaktu').textContent = event.time ? event.time.substring(0, 5) : 'Sepanjang Hari';
-                document.getElementById('sideDetailReminder').textContent = getReminderText(event);
-                sideModalDetail.classList.add('open');
-            }
-
-            window.closeSideModal = function() {
-                sideModalDetail.classList.remove('open');
-                idAktivitasYangDilihat = null;
-            }
-
-            window.getReminderText = function(event) {
-                if (event.reminder === 'none' || !event.reminder) return 'Reminder tidak disetel.';
-                switch (event.reminder) {
-                    case '15m': return '15 Menit Sebelum Acara';
-                    case '1h': return '1 Jam Sebelum Acara';
-                    case 'custom':
-                        return event.customTime ? `Kustom: ${formatTanggalTampilan(event.customTime.substring(0, 10), event.customTime.substring(11, 16))}` : 'Waktu Kustom Disetel';
-                    default: return 'Reminder Aktif';
-                }
-            }
-
-            // ==================== AKSI DARI SIDE DETAIL ====================
-            window.editFromSide = function() {
-                if (!idAktivitasYangDilihat) return;
-                window.openModal('edit', idAktivitasYangDilihat);
-                closeSideModal();
-            }
-
-            window.deleteFromSide = function() {
-                if (!idAktivitasYangDilihat) return;
-                window.confirmDelete(idAktivitasYangDilihat);
-                closeSideModal();
-            }
-
-            // ==================== FILTER & SORT ====================
-            window.applySortFilter = function() {
-                const sortValue = document.getElementById('sortFilter').value;
-                const currentUrl = new URL(window.location.href);
-                currentUrl.searchParams.set('sort', sortValue);
-                currentUrl.searchParams.set('page', '1'); // Reset ke halaman 1
-                window.location.href = currentUrl.toString();
-            }
-
-            window.resetFilter = function() {
-                const currentUrl = new URL(window.location.href);
-                currentUrl.searchParams.delete('sort');
-                currentUrl.searchParams.delete('page');
-                window.location.href = currentUrl.toString();
-            }
-
-            // ==================== DOCUMENT READY ====================
-            document.addEventListener('DOMContentLoaded', function() {
-                ambilElemenHTML();
-                // Langsung render dari data yang sudah ada
-                tampilkanKalender();
-                console.log("Sistem Kalender NotezQue siap.");
-
-                // Tampilkan notifikasi jika ada
-                @if (Session::has('status_message'))
-                    // Anda bisa menggunakan library notifikasi yang lebih canggih di sini
-                    alert("{{ Session::get('status_message') }}");
-                @endif
+    // Make calendar globally accessible
+    window.calendar = calendar;
+    
+    // View switcher buttons
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.view-btn').forEach(b => {
+                b.classList.remove('active', 'bg-blue-600', 'text-white');
+                b.classList.add('bg-gray-100', 'text-gray-600');
             });
-        </script>
-    </body>
+            this.classList.add('active', 'bg-blue-600', 'text-white');
+            this.classList.remove('bg-gray-100', 'text-gray-600');
+        });
+    });
+});
 
-    </html>
+function openAddModal(date = null) {
+    const modal = document.getElementById('eventModal');
+    const form = document.getElementById('eventForm');
+    const modalTitle = document.getElementById('modalTitle');
+    const deleteBtn = document.getElementById('deleteBtn');
+    
+    modal.classList.remove('hidden');
+    modalTitle.textContent = 'Tambah Acara Baru';
+    form.action = '{{ route("kalender.store") }}';
+    document.getElementById('methodInput').value = 'POST';
+    deleteBtn.classList.add('hidden');
+    form.reset();
+    
+    if (date) {
+        document.getElementById('inputDate').value = date;
+    }
+    
+    // Re-initialize icons
+    setTimeout(() => lucide.createIcons(), 10);
+}
 
+function openEditModal(event) {
+    const modal = document.getElementById('eventModal');
+    const form = document.getElementById('eventForm');
+    const modalTitle = document.getElementById('modalTitle');
+    const deleteBtn = document.getElementById('deleteBtn');
+    
+    modal.classList.remove('hidden');
+    modalTitle.textContent = 'Edit Acara';
+    form.action = `/kalender/${event.id}`;
+    document.getElementById('methodInput').value = 'PUT';
+    deleteBtn.classList.remove('hidden');
+    
+    document.getElementById('eventId').value = event.id;
+    document.getElementById('inputTitle').value = event.title;
+    document.getElementById('inputDesk').value = event.extendedProps.description || '';
+    
+    const startDate = new Date(event.start);
+    document.getElementById('inputDate').value = startDate.toISOString().split('T')[0];
+    
+    if (event.start.toTimeString) {
+        const time = startDate.toTimeString().slice(0, 5);
+        document.getElementById('inputTime').value = time;
+    }
+    
+    document.getElementById('inputStatus').value = event.extendedProps.status || 'pending';
+    
+    // Re-initialize icons
+    setTimeout(() => lucide.createIcons(), 10);
+}
+
+function openEditModalById(eventId) {
+    const activities = @json($aktivitasBulanIni ?? []);
+    const activity = activities.find(a => a.id === eventId);
+    
+    if (activity) {
+        const modal = document.getElementById('eventModal');
+        const form = document.getElementById('eventForm');
+        const modalTitle = document.getElementById('modalTitle');
+        const deleteBtn = document.getElementById('deleteBtn');
+        
+        modal.classList.remove('hidden');
+        modalTitle.textContent = 'Edit Acara';
+        form.action = `/kalender/${activity.id}`;
+        document.getElementById('methodInput').value = 'PUT';
+        deleteBtn.classList.remove('hidden');
+        
+        document.getElementById('eventId').value = activity.id;
+        document.getElementById('inputTitle').value = activity.title;
+        document.getElementById('inputDesk').value = activity.desk || '';
+        
+        // Parse date properly
+        let dateStr = activity.date;
+        if (typeof dateStr === 'object' && dateStr.date) {
+            dateStr = dateStr.date.split(' ')[0];
+        } else if (typeof dateStr === 'string' && dateStr.includes('T')) {
+            dateStr = dateStr.split('T')[0];
+        }
+        
+        document.getElementById('inputDate').value = dateStr;
+        document.getElementById('inputTime').value = activity.time || '';
+        document.getElementById('inputStatus').value = activity.status || 'pending';
+        
+        // Re-initialize icons
+        setTimeout(() => lucide.createIcons(), 10);
+    }
+}
+
+function deleteEvent() {
+    const eventId = document.getElementById('eventId').value;
+    if (!eventId) return;
+    
+    if (confirm('Yakin ingin menghapus acara ini?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/kalender/${eventId}`;
+        
+        const csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = '_token';
+        csrfToken.value = '{{ csrf_token() }}';
+        
+        const methodField = document.createElement('input');
+        methodField.type = 'hidden';
+        methodField.name = '_method';
+        methodField.value = 'DELETE';
+        
+        form.appendChild(csrfToken);
+        form.appendChild(methodField);
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+function closeEventModal() {
+    const modal = document.getElementById('eventModal');
+    modal.classList.add('hidden');
+}
+
+// Close modal on outside click
+document.getElementById('eventModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeEventModal();
+    }
+});
+</script>
+
+<style>
+/* Modern Calendar Styling */
+.fc {
+    font-family: 'Inter', sans-serif;
+    --fc-border-color: #e5e7eb;
+    --fc-today-bg-color: #eff6ff;
+}
+
+/* Header */
+.fc .fc-toolbar {
+    padding: 0 0 1rem 0;
+    margin-bottom: 0;
+}
+
+.fc-toolbar-title {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: #111827;
+}
+
+.fc .fc-button {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+    border-radius: 0.5rem !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: 500 !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.fc .fc-button:hover {
+    background: #f9fafb !important;
+    border-color: #d1d5db !important;
+}
+
+.fc .fc-button:active,
+.fc .fc-button-active {
+    background: #f3f4f6 !important;
+    border-color: #9ca3af !important;
+}
+
+/* Day headers */
+.fc .fc-col-header-cell {
+    padding: 0.75rem 0.5rem;
+    background: #f9fafb;
+    border-color: #e5e7eb !important;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Time labels in week view */
+.fc .fc-timegrid-slot-label {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-weight: 500;
+    border-color: #f3f4f6 !important;
+}
+
+.fc .fc-timegrid-slot {
+    height: 3rem;
+    border-color: #f3f4f6 !important;
+}
+
+/* Day cells */
+.fc .fc-day {
+    background: white;
+}
+
+.fc .fc-day-today {
+    background: #eff6ff !important;
+}
+
+.fc .fc-daygrid-day-number {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    padding: 0.5rem;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Events */
+.fc-event {
+    border: none !important;
+    border-radius: 0.5rem !important;
+    padding: 0.375rem 0.5rem !important;
+    margin: 0.125rem 0 !important;
+    cursor: pointer !important;
+    font-weight: 500 !important;
+    font-size: 0.8125rem !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.fc-event:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+.fc-event.fc-event-pending {
+    background: #3b82f6 !important;
+    color: white !important;
+}
+
+.fc-event.fc-event-selesai {
+    background: #10b981 !important;
+    color: white !important;
+}
+
+.fc-event-title {
+    font-weight: 600;
+}
+
+.fc-event-time {
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+/* Now indicator */
+.fc .fc-timegrid-now-indicator-line {
+    border-color: #ef4444;
+    border-width: 2px;
+}
+
+.fc .fc-timegrid-now-indicator-arrow {
+    border-color: #ef4444;
+}
+
+/* Scrollbar */
+.fc-scroller::-webkit-scrollbar {
+    width: 6px;
+}
+
+.fc-scroller::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 3px;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* View buttons active state */
+.view-btn.active {
+    background: #3b82f6 !important;
+    color: white !important;
+}
+
+/* Sidebar scrollbar */
+.lg\:col-span-4 .overflow-y-auto::-webkit-scrollbar {
+    width: 4px;
+}
+
+.lg\:col-span-4 .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.lg\:col-span-4 .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 2px;
+}
+
+.lg\:col-span-4 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .fc-toolbar-title {
+        font-size: 1.125rem !important;
+    }
+    
+    .fc .fc-button {
+        padding: 0.375rem 0.75rem !important;
+        font-size: 0.875rem !important;
+    }
+}
+</style>
 @endsection
