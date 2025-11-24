@@ -5,6 +5,7 @@ use App\Http\Controllers\{
     LandingController,
     KalenderController,
     AuthController,
+    ProfileController,
     TugasController,
     MateriController,
     CatatanController,
@@ -12,7 +13,7 @@ use App\Http\Controllers\{
     AdminDashboardController,
     AdminUserController,
     AdminKontenController,
-    AdminStatistikController
+    AdminStatistikController,
 };
 
 /*
