@@ -6,7 +6,18 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Http\\Controllers\\AuthController' => $baseDir . '/app/Http/Controllers/AuthController.php',
+    'App\\Http\\Controllers\\CatatanController' => $baseDir . '/app/Http/Controllers/CatatanController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\DashboardController' => $baseDir . '/app/Http/Controllers/DashboardController.php',
+    'App\\Http\\Controllers\\KalenderController' => $baseDir . '/app/Http/Controllers/KalenderController.php',
+    'App\\Http\\Controllers\\LandingController' => $baseDir . '/app/Http/Controllers/LandingController.php',
+    'App\\Http\\Controllers\\MateriController' => $baseDir . '/app/Http/Controllers/MateriController.php',
+    'App\\Http\\Controllers\\TugasController' => $baseDir . '/app/Http/Controllers/TugasController.php',
+    'App\\Http\\Middleware\\CheckAuth' => $baseDir . '/app/Http/Middleware/CheckAuth.php',
+    'App\\Models\\Activity' => $baseDir . '/app/Models/Activity.php',
+    'App\\Models\\Note' => $baseDir . '/app/Models/Note.php',
+    'App\\Models\\Task' => $baseDir . '/app/Models/Task.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
