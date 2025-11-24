@@ -1,6 +1,7 @@
 @extends('layouts.main-nav')
 
 @section('title', 'Kalender')
+@section('subtitle', 'Lihat dan kelola aktivitas Anda dengan mudah menggunakan kalender interaktif kami.')
 
 @section('content')
 <div class="min-h-screen">
@@ -13,19 +14,24 @@
         <!-- Left Sidebar - Upcoming Events -->
         <div class="lg:col-span-4 xl:col-span-3">
             <div class="bg-slate-50 rounded-xl p-4 shadow-sm border border-slate-200">
-                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Upcoming Events</h3>
+                <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Acara Mendatang</h3>
                 
                 <button onclick="openAddModal()" class="w-full mb-4 p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition flex items-center justify-center gap-2">
                     <i data-lucide="plus" class="w-5 h-5"></i>
-                    <span class="font-medium">Add Event</span>
+                    <span class="font-medium">Tambah Acara</span>
                 </button>
                 
                 <!-- Events List -->
-                <div class="space-y-2">
+                <div class="space-y-2 max-h-[600px] overflow-y-auto pr-2" id="eventsContainer">
                     @php
-$upcomingEvents = ($aktivitasBulanIni ?? collect())->filter(function ($event) {
-    return \Carbon\Carbon::parse($event->date)->isFuture() || \Carbon\Carbon::parse($event->date)->isToday();
-})->sortBy('date')->take(10);
+                        $allUpcomingEvents = ($aktivitasBulanIni ?? collect())->filter(function ($event) {
+                            return \Carbon\Carbon::parse($event->date)->isFuture() || \Carbon\Carbon::parse($event->date)->isToday();
+                        })->sortBy('date')->values();
+                        
+                        $totalEvents = $allUpcomingEvents->count();
+                        $currentPage = 1;
+                        $perPage = 5;
+                        $upcomingEvents = $allUpcomingEvents->take($perPage);
                     @endphp
                     
                     @forelse($upcomingEvents as $event)
@@ -49,10 +55,27 @@ $upcomingEvents = ($aktivitasBulanIni ?? collect())->filter(function ($event) {
                     @empty
                         <div class="text-center py-8 text-slate-400">
                             <i data-lucide="calendar-x" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
-                            <p class="text-sm">No upcoming events</p>
+                            <p class="text-sm">Tidak Ada Acara</p>
                         </div>
                     @endforelse
                 </div>
+                
+                <!-- Pagination -->
+                @if($totalEvents > $perPage)
+                    <div class="mt-4 pt-4 border-t border-slate-200">
+                        <div class="flex items-center justify-between text-sm">
+                            <button id="prevBtn" onclick="changePage(-1)" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition" disabled>
+                                ← Sebelumnya
+                            </button>
+                            <span class="text-slate-500 font-medium">
+                                <span id="currentPageDisplay">1</span> / <span id="totalPages">{{ ceil($totalEvents / $perPage) }}</span>
+                            </span>
+                            <button id="nextBtn" onclick="changePage(1)" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition">
+                                Selanjutnya →
+                            </button>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -62,9 +85,9 @@ $upcomingEvents = ($aktivitasBulanIni ?? collect())->filter(function ($event) {
                 <!-- View Tabs -->
                 <div class="flex items-center justify-between mb-4 border-b border-gray-200 pb-4">
                     <div class="flex gap-2">
-                        <button onclick="calendar.changeView('timeGridDay')" class="view-btn px-4 py-2 rounded-lg text-sm font-medium transition bg-gray-100 text-gray-600 hover:bg-gray-200">Day</button>
-                        <button onclick="calendar.changeView('timeGridWeek')" class="view-btn px-4 py-2 rounded-lg text-sm font-medium transition bg-gray-100 text-gray-600 hover:bg-gray-200">Week</button>
-                        <button onclick="calendar.changeView('dayGridMonth')" class="view-btn active px-4 py-2 rounded-lg text-sm font-medium transition bg-blue-600 text-white">Month</button>
+                        <button onclick="calendar.changeView('timeGridDay')" class="view-btn px-4 py-2 rounded-lg text-sm font-medium transition bg-gray-100 text-gray-600 hover:bg-gray-200">Hari</button>
+                        <button onclick="calendar.changeView('timeGridWeek')" class="view-btn px-4 py-2 rounded-lg text-sm font-medium transition bg-gray-100 text-gray-600 hover:bg-gray-200">Minggu</button>
+                        <button onclick="calendar.changeView('dayGridMonth')" class="view-btn active px-4 py-2 rounded-lg text-sm font-medium transition bg-blue-600 text-white">Bulan</button>
                     </div>
                 </div>
                 
@@ -175,10 +198,86 @@ document.addEventListener('DOMContentLoaded', function() {
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <script>
+// Pagination for upcoming events
+let currentPage = 1;
+const perPage = 5;
+const allEvents = @json($allUpcomingEvents ?? []);
+
+function renderEvents(page) {
+    const container = document.getElementById('eventsContainer');
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+    const eventsToShow = allEvents.slice(start, end);
+    
+    if (eventsToShow.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-8 text-slate-400">
+                <i data-lucide="calendar-x" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
+                <p class="text-sm">Tidak Ada Acara</p>
+            </div>
+        `;
+    } else {
+        container.innerHTML = eventsToShow.map(event => {
+            const date = new Date(event.date);
+            const dateStr = date.toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' });
+            const statusBadge = event.status === 'selesai' 
+                ? '<span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">Done</span>'
+                : '<span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700">Pending</span>';
+            const timeStr = event.time ? `<p class="text-xs text-slate-400 mt-2">⏰ ${event.time.substring(0, 5)}</p>` : '';
+            const deskStr = event.desk ? `<p class="text-xs text-slate-500 line-clamp-2">${event.desk}</p>` : '';
+            
+            return `
+                <div class="p-4 rounded-xl hover:bg-slate-50 cursor-pointer border border-slate-200 bg-white" onclick="openEditModalById(${event.id})">
+                    <div class="flex items-start justify-between mb-2">
+                        <span class="text-xs font-semibold text-slate-400 uppercase">${dateStr}</span>
+                        ${statusBadge}
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-sm mb-1">${event.title}</h3>
+                    ${deskStr}
+                    ${timeStr}
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Re-initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+    
+    updatePaginationButtons();
+}
+
+function updatePaginationButtons() {
+    const totalPages = Math.ceil(allEvents.length / perPage);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const currentPageDisplay = document.getElementById('currentPageDisplay');
+    
+    if (prevBtn) prevBtn.disabled = currentPage === 1;
+    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+    if (currentPageDisplay) currentPageDisplay.textContent = currentPage;
+}
+
+function changePage(direction) {
+    const totalPages = Math.ceil(allEvents.length / perPage);
+    const newPage = currentPage + direction;
+    
+    if (newPage >= 1 && newPage <= totalPages) {
+        currentPage = newPage;
+        renderEvents(currentPage);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Lucide icons
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
+    }
+    
+    // Initialize pagination if there are events
+    if (allEvents.length > perPage) {
+        updatePaginationButtons();
     }
 
     // Activities data from controller
