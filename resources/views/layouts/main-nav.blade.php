@@ -763,15 +763,9 @@
                             </div>
                         </div>
 
-                        <!-- Edit/Quick Action -->
-                        <!-- <div class="top-nav-icon group">
-                            <i data-lucide="edit"
-                                class="w-5 h-5 text-gray-500 transition duration-200 group-hover:text-v4-secondary"></i>
-                        </div> -->
-
                         @php
                             $user = auth()->user();
-                            $initial = $user && $user->name ? strtoupper(substr($user->name, 0, 1)) : 'U';
+                            $initial = $user && $user->name ? strtoupper(substr($user->name, 0,strlen($user->name))) : 'U';
                             $profileUrl = ($user && $user->profile_photo)
                                 ? asset('storage/' . $user->profile_photo)
                                 : "https://placehold.co/120x120/6366F1/FFFFFF?text={$initial}";
@@ -783,9 +777,9 @@
                                 <img
                                     src="{{ $profileUrl }}"
                                     alt="Profile Picture"
-                                    class="w-10 h-10 rounded-full border-4 border-white shadow-xl object-cover"
+                                    class="w-10 h-10 rounded-full shadow-xl object-cover"
                                     loading="lazy">
-                                <span class="text-sm font-medium text-v4-text hidden lg:inline">Halo, {{ $user?->name ?? 'Pengguna' }}</span>
+                                <span class="text-sm font-medium text-v4-text hidden lg:inline">Halo, {{ $initial }}</span>
                                 <i data-lucide="chevron-down"
                                     class="w-4 h-4 text-gray-500 hidden lg:inline transition-transform duration-200"
                                     id="profile-arrow"></i>
