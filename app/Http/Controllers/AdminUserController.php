@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\KontenStatis;
 
 class AdminUserController extends Controller
 {
@@ -14,12 +15,14 @@ class AdminUserController extends Controller
         $users = User::when($q, fn($qb) => $qb->where('name', 'like', '%' . $q . '%')->orWhere('email', 'like', '%' . $q . '%'))
             ->orderBy('created_at', 'desc')
             ->paginate(20);
-        return view('admin.user.index', compact('users', 'q'));
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+        return view('admin.user.index', compact('users', 'q', 'kontenStatis'));
     }
 
     public function edit(User $user)
     {
-        return view('admin.user.edit', compact('user'));
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+        return view('admin.user.edit', compact('user', 'kontenStatis'));
     }
 
     public function update(Request $req, User $user)

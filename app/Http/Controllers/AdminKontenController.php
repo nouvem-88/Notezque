@@ -12,12 +12,14 @@ class AdminKontenController extends Controller
     public function index()
     {
         $items = KontenStatis::orderBy('key')->get();
-        return view('admin.konten.index', compact('items'));
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+        return view('admin.konten.index', compact('items', 'kontenStatis'));
     }
 
     public function edit(KontenStatis $content)
     {
-        return view('admin.konten.edit', ['konten' => $content]);
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+        return view('admin.konten.edit', ['konten' => $content, 'kontenStatis' => $kontenStatis]);
     }
 
     public function update(Request $req, KontenStatis $content)

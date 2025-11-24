@@ -13,24 +13,16 @@ class DashboardController extends Controller
             return redirect('/login');
         }
 
-        // Ambil semua aktivitas user dari database
-        $all_aktivitas = Auth::user()->activities;
+        $user = Auth::user();
 
-        // Ambil acara mendatang (max 3) untuk dashboard
-        $acaraMendatang = $all_aktivitas
-            ->filter(function ($activity) {
-                return \Carbon\Carbon::parse($activity->date)->isFuture() || \Carbon\Carbon::parse($activity->date)->isToday();
-            })
-            ->sortBy(function ($activity) {
-                return $activity->date . ' ' . ($activity->time ?? '00:00');
-            })
+        // Acara mendatang (dibatasi 3 item)
+        $acaraMendatang = $user->activities()
+            ->whereDate('date', '>=', today())
+            ->orderBy('date')
+            ->orderBy('time')
             ->take(3)
-            ->values();
+            ->get();
 
-        // Kirim data ke view
-        return view('pages.dash', [
-            'acaraMendatang' => $acaraMendatang,
-            'semua_aktivitas' => $all_aktivitas,
-        ]);
+        return view('pages.dash', compact('acaraMendatang'));
     }
 }

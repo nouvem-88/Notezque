@@ -12,11 +12,11 @@
         <!-- Sidebar -->
         <aside class="w-64 bg-white shadow-lg flex-shrink-0 hidden md:flex flex-col">
             <div class="p-6 border-b border-gray-200">
-                <h1 class="text-2xl font-bold text-blue-600 flex items-center">
-                    <i class="fas fa-clipboard-list mr-2"></i>
-                    NotezQue
+                <h1 class="text-2xl font-bold text-blue-600 flex items-center space-x-2">
+                    <img src="{{ $kontenStatis['site_logo'] ?? 'logo.png' }}" alt="{{ $kontenStatis['site_name'] ?? 'Notezque' }} Logo" class="h-8 w-auto">
+                    <span>{{ $kontenStatis['site_name'] ?? 'NotezQue' }}</span>
                 </h1>
-                <p class="text-xs text-gray-500 mt-1">Productivity Organizer</p>
+                <p class="text-xs text-gray-500 mt-1">{{ $kontenStatis['site_tagline'] ?? 'Productivity Organizer' }}</p>
             </div>
             
             <nav class="flex-1 p-4 space-y-2">

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Note;
 use App\Models\Task;
 use App\Models\Activity;
+use App\Models\KontenStatis;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -73,6 +74,9 @@ class AdminStatistikController extends Controller
             ->take(5)
             ->get();
 
+        // Konten statis
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+
         return view('admin.statistik.index', compact(
             'totalUsers',
             'totalAdmins',
@@ -89,7 +93,8 @@ class AdminStatistikController extends Controller
             'userTrend',
             'notesTrend',
             'tasksTrend',
-            'topUsers'
+            'topUsers',
+            'kontenStatis'
         ));
     }
 }

@@ -42,26 +42,6 @@ class NoteSeeder extends Seeder
                 'content' => "Buku yang harus dibaca:\n\n1. Clean Code - Robert C. Martin\n2. Design Patterns - Gang of Four\n3. The Pragmatic Programmer\n4. Laravel Up & Running - Matt Stauffer",
                 'category' => 'personal',
             ],
-            [
-                'title' => 'Meeting Notes - Tim Proyek',
-                'content' => "Tanggal: 20 Nov 2025\n\nAgenda:\n- Review progress sprint 1\n- Planning sprint 2\n- Diskusi masalah teknis\n\nAction Items:\n- John: Fix bug login\n- Sarah: Design UI dashboard\n- Mike: Setup CI/CD pipeline",
-                'category' => 'work',
-            ],
-            [
-                'title' => 'Tips Produktivitas',
-                'content' => "1. Gunakan Pomodoro Technique (25 menit fokus, 5 menit istirahat)\n2. Prioritaskan tugas dengan Eisenhower Matrix\n3. Hindari multitasking\n4. Buat to-do list di malam hari\n5. Review progress setiap minggu",
-                'category' => 'personal',
-            ],
-            [
-                'title' => 'Catatan Rapat Organisasi',
-                'content' => "Rapat Bulanan HMTI\n\nKeputusan:\n- Event tech talk bulan depan\n- Workshop Laravel untuk junior\n- Kerjasama dengan perusahaan startup\n\nPenanggung Jawab:\n- Acara: Divisi Acara\n- Sponsorship: Divisi Kemitraan",
-                'category' => 'work',
-            ],
-            [
-                'title' => 'Resep Masakan Favorit',
-                'content' => "Nasi Goreng Spesial\n\nBahan:\n- Nasi putih 2 piring\n- Telur 2 butir\n- Bawang merah 5 siung\n- Bawang putih 3 siung\n- Kecap manis\n- Garam, merica\n\nCara membuat:\n1. Tumis bumbu halus\n2. Masukkan telur, orak-arik\n3. Tambahkan nasi\n4. Beri kecap dan bumbu",
-                'category' => 'personal',
-            ],
         ];
 
         foreach ($notes as $noteData) {
