@@ -7,7 +7,12 @@ use App\Http\Controllers\{
     AuthController,
     TugasController,
     MateriController,
-    CatatanController
+    CatatanController,
+    KontenStatisController,
+    AdminDashboardController,
+    AdminUserController,
+    AdminKontenController,
+    AdminStatistikController
 };
 
 /*
@@ -31,6 +36,10 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name
 
 Route::get('/change-password', [AuthController::class, 'changePasswordPage'])->name('change');
 Route::post('/change-password', [AuthController::class, 'changePassword'])->name('change.post');
+
+// Konten Statis (Public)
+Route::get('/konten', [KontenStatisController::class, 'index'])->name('konten.index');
+Route::get('/konten/{key}', [KontenStatisController::class, 'show'])->name('konten.show');
 
 // Protected Routes (requires authentication)
 Route::middleware('auth')->group(function () {
@@ -68,4 +77,19 @@ Route::middleware('auth')->group(function () {
 
     // Materi Routes
     Route::get('/materi', [MateriController::class, 'index'])->name('materi');
+
+    Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+        // Dashboard Admin
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('home');
+
+        // Kelola User
+        Route::resource('users', AdminUserController::class)->names('users');
+
+        // Konten Statis
+        Route::resource('content', AdminKontenController::class)->names('content');
+
+        // Statistik
+        Route::get('statistics', [AdminStatistikController::class, 'index'])->name('statistics');
+    });
 });

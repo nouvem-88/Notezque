@@ -25,18 +25,18 @@
                     <i class="fas fa-chart-line w-5 mr-3"></i>
                     Dashboard
                 </a>
-                <a href="{{ route('admin.users') }}" 
-                   class="flex items-center px-4 py-3 rounded-lg font-medium transition-colors {{ Request::is('admin/users') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-100' }}">
+                <a href="{{ route('admin.users.index') }}" 
+                   class="flex items-center px-4 py-3 rounded-lg font-medium transition-colors {{ Request::is('admin/users*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-100' }}">
                     <i class="fas fa-users w-5 mr-3"></i>
                     Pengguna
                 </a>
-                <a href="{{ route('admin.content') }}" 
-                   class="flex items-center px-4 py-3 rounded-lg font-medium transition-colors {{ Request::is('admin/content') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-100' }}">
+                <a href="{{ route('admin.content.index') }}" 
+                   class="flex items-center px-4 py-3 rounded-lg font-medium transition-colors {{ Request::is('admin/content*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-100' }}">
                     <i class="fas fa-file-alt w-5 mr-3"></i>
                     Konten Statis
                 </a>
                 <a href="{{ route('admin.statistics') }}" 
-                   class="flex items-center px-4 py-3 rounded-lg font-medium transition-colors {{ Request::is('admin/statistics') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-100' }}">
+                   class="flex items-center px-4 py-3 rounded-lg font-medium transition-colors {{ Request::is('admin/statistics*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-100' }}">
                     <i class="fas fa-chart-bar w-5 mr-3"></i>
                     Statistik
                 </a>

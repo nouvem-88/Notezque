@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 @extends('layouts.main-nav')
 
 @section('title', 'Kalender')
@@ -645,3 +647,4 @@
     </html>
 
 @endsection
+>>>>>>> 0f8b03d4ff3448da4d3ff9b4c4be1a9281174c4a
