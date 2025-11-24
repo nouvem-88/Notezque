@@ -69,3 +69,10 @@ Route::middleware('auth')->group(function () {
     // Materi Routes
     Route::get('/materi', [MateriController::class, 'index'])->name('materi');
 });
+
+// profile photo routes
+
+Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])
+    ->name('profile.updatePhoto')
+    ->middleware('auth');
+
