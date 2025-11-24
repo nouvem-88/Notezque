@@ -10,6 +10,10 @@
 
             <!-- Teks Hero -->
             <div class="md:w-3/5 text-center md:text-left animate-on-scroll fade-in-left">
+                @php
+                    $heroTitle = \App\Models\KontenStatis::where('key', 'hero_title')->first();
+                    $heroDesc = \App\Models\KontenStatis::where('key', 'hero_description')->first();
+                @endphp
                 <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200/50 rounded-full mb-6">
                     <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
                     <p class="text-sm font-semibold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent tracking-wide">
@@ -18,12 +22,16 @@
                 </div>
                 
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] mb-6">
-                    Kelola <span class="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Tugas Kuliah</span><br>
-                    <span class="text-slate-800">Tanpa Stres</span>
+                    @if($heroTitle)
+                        {!! nl2br(e($heroTitle->value)) !!}
+                    @else
+                        Kelola <span class="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Tugas Kuliah</span><br>
+                        <span class="text-slate-800">Tanpa Stres</span>
+                    @endif
                 </h1>
                 
                 <p class="text-xl text-slate-600 max-w-2xl mx-auto md:mx-0 mb-10 leading-relaxed">
-                    Platform digital <span class="font-semibold text-slate-800">terpusat</span> yang dirancang khusus untuk mahasiswa agar aktivitas akademik menjadi <span class="font-semibold text-slate-800">terorganisir, fleksibel, dan terfokus</span>.
+                    {{ $heroDesc ? $heroDesc->value : 'Platform digital terpusat yang dirancang khusus untuk mahasiswa agar aktivitas akademik menjadi terorganisir, fleksibel, dan terfokus.' }}
                 </p>
 
                 <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 mb-12">

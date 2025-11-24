@@ -1,23 +1,12 @@
 @extends('layouts.main-nav')
 
+@section('title', 'Kalender')
+
 @section('content')
 <div class="min-h-screen">
     <main class="flex-grow bg-white rounded-tl-3xl p-6 md:p-10">
         <div class="max-w-7xl mx-auto">
-            <!-- Header: match Materi style -->
-            <div class="flex flex-wrap justify-between items-center gap-4 mb-8">
-                <div class="flex items-center gap-3">
-                    <h2 class="text-2xl md:text-3xl font-bold text-slate-800">Kalender</h2>
-                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                        </svg>
-                    </div>
-                </div>
-            </div>
+           
     <!-- Main Grid Layout -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
@@ -34,9 +23,9 @@
                 <!-- Events List -->
                 <div class="space-y-2">
                     @php
-                        $upcomingEvents = ($aktivitasBulanIni ?? collect())->filter(function($event) {
-                            return \Carbon\Carbon::parse($event->date)->isFuture() || \Carbon\Carbon::parse($event->date)->isToday();
-                        })->sortBy('date')->take(10);
+$upcomingEvents = ($aktivitasBulanIni ?? collect())->filter(function ($event) {
+    return \Carbon\Carbon::parse($event->date)->isFuture() || \Carbon\Carbon::parse($event->date)->isToday();
+})->sortBy('date')->take(10);
                     @endphp
                     
                     @forelse($upcomingEvents as $event)

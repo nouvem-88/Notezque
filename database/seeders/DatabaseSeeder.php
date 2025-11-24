@@ -16,6 +16,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Seed konten statis
+        $this->call([
+            KontenStatisSeeder::class,
+        ]);
+
         // Create default user
         $user = User::create([
             'name' => 'User NotezQu',
@@ -23,12 +28,6 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password123'),
         ]);
 
-        // Create admin user
-        $admin = User::create([
-            'name' => 'Admin',
-            'email' => 'admin@notezque.org',
-            'password' => Hash::make('admin'),
-        ]);
 
         // Create sample notes for user
         $user->notes()->createMany([
@@ -102,5 +101,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'done',
             ],
         ]);
+
+        $this->call(AdminSeeder::class);
     }
 }
