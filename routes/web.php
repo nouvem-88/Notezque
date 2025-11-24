@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     AdminDashboardController,
     AdminUserController,
     AdminKontenController,
-    AdminStatistikController
+    AdminStatistikController,
+    ProfileController
 };
 
 /*
