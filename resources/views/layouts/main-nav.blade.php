@@ -10,19 +10,19 @@
     <!-- Konfigurasi Tailwind untuk warna dan font (Sesuai Gaya Pastel Minimalis) -->
     <script>
         tailwind.config = {
+            darkMode: 'class', // Sinkron dengan build config agar utilitas dark: tersedia
             theme: {
                 extend: {
                     colors: {
-                        // Warna dasar pastel dari app-v4.blade.php
-                        'v4-background': '#FFFFFF', // Hampir Putih (Background utama)
-                        'v4-surface': '#FFFFFF', // Putih Murni (Card/Surface)
-                        'v4-primary': '#3385ff', // Blue Pastel (Aksen utama)
-                        'v4-secondary': '#A8A8E6', // Lavender Pastel (Aksen sekunder)
-                        'v4-pink': '#FFC0CB', // Pink Pastel
-                        'v4-text': '#1F2937', // Dark Gray (Teks utama)
-                        'v4-light': '#EDEFFF', // Sangat terang untuk hover sidebar
+                        'v4-background': '#FFFFFF',
+                        'v4-surface': '#FFFFFF',
+                        'v4-primary': '#3385ff',
+                        'v4-secondary': '#A8A8E6',
+                        'v4-pink': '#FFC0CB',
+                        'v4-text': '#1F2937',
+                        'v4-light': '#EDEFFF',
                         'v4-subtle': '#E5E7EB',
-                        'v4-custom': '#33adff' // Abu-abu terang
+                        'v4-custom': '#33adff'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -38,6 +38,21 @@
                 }
             }
         }
+    </script>
+    <!-- Prevent FOUC: set kelas .dark lebih awal sebelum render body -->
+    <script>
+        (function() {
+            try {
+                const stored = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const shouldDark = stored ? stored === 'dark' : prefersDark;
+                if (shouldDark) {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (e) {
+                // Jika localStorage tidak tersedia, abaikan.
+            }
+        })();
     </script>
     <!-- Tambahkan Lucide Icons untuk kebutuhan Dashboard -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -222,6 +237,74 @@
             background-color: #374151 !important;
         }
 
+        /* --- Generic Utility Overrides (Gray & Slate families) --- */
+        /* Backgrounds */
+        .dark .bg-white { background-color: #2d2d2d !important; }
+        .dark .bg-gray-50, .dark .bg-slate-50 { background-color: #262626 !important; }
+        .dark .bg-gray-100, .dark .bg-slate-100 { background-color: #2f2f2f !important; }
+        .dark .bg-gray-200, .dark .bg-slate-200 { background-color: #383838 !important; }
+        .dark .bg-gray-300, .dark .bg-slate-300 { background-color: #404040 !important; }
+
+        /* Text (elevated scale) */
+        .dark .text-gray-900, .dark .text-slate-900 { color: #f8fafc !important; }
+        .dark .text-gray-800, .dark .text-slate-800 { color: #f1f5f9 !important; }
+        .dark .text-gray-700, .dark .text-slate-700 { color: #e2e8f0 !important; }
+        .dark .text-gray-600, .dark .text-slate-600 { color: #cbd5e1 !important; }
+        .dark .text-gray-500, .dark .text-slate-500 { color: #94a3b8 !important; }
+        .dark .text-gray-400, .dark .text-slate-400 { color: #64748b !important; }
+
+        /* Borders & Dividers */
+        .dark .border-gray-100, .dark .border-slate-100 { border-color: #2f2f2f !important; }
+        .dark .border-gray-200, .dark .border-slate-200 { border-color: #383838 !important; }
+        .dark .border-gray-300, .dark .border-slate-300 { border-color: #404040 !important; }
+        .dark .divide-gray-100 > * + *, .dark .divide-slate-100 > * + * { border-color: #2f2f2f !important; }
+
+        /* Hover states unify for subtle surfaces */
+        .dark .hover\:bg-gray-50:hover, .dark .hover\:bg-slate-50:hover { background-color: #313131 !important; }
+        .dark .hover\:bg-gray-100:hover, .dark .hover\:bg-slate-100:hover { background-color: #3a3a3a !important; }
+        .dark .hover\:bg-gray-200:hover, .dark .hover\:bg-slate-200:hover { background-color: #454545 !important; }
+
+        /* Form elements (common) */
+        .dark input[type="text"],
+        .dark input[type="email"],
+        .dark input[type="password"],
+        .dark textarea,
+        .dark select {
+            background-color: #2d2d2d !important;
+            color: #e5e7eb !important;
+            border-color: #404040 !important;
+        }
+        .dark input::placeholder, .dark textarea::placeholder { color: #64748b !important; }
+        .dark input:focus, .dark textarea:focus, .dark select:focus { outline: none; border-color: #3385ff !important; box-shadow: 0 0 0 1px #3385ff40; }
+
+        /* Buttons (semantic adjustments) */
+        .dark .btn-primary { background-color: #3385ff !important; color: #fff !important; }
+        .dark .btn-secondary { background-color: #4b5563 !important; color: #e5e7eb !important; }
+        .dark .btn-danger { background-color: #dc2626 !important; color: #fff !important; }
+        .dark .btn-primary:hover { background-color: #1d72e8 !important; }
+        .dark .btn-secondary:hover { background-color: #64748b !important; }
+        .dark .btn-danger:hover { background-color: #b91c1c !important; }
+
+        /* Table adjustments */
+        .dark table { color: #e5e7eb; }
+        .dark thead { background-color: #2d2d2d; }
+        .dark tbody tr { border-color: #383838; }
+        .dark tbody tr:hover { background-color: #313131; }
+
+        /* Code / pre blocks */
+        .dark pre, .dark code { background-color: #262626 !important; color: #e5e7eb !important; }
+        .dark pre { border: 1px solid #383838 !important; }
+
+        /* Cards generic */
+        .dark .card, .dark .panel, .dark .widget { background-color: #2d2d2d !important; border-color: #383838 !important; }
+
+        /* Utility for smooth transitions across newly added elements */
+        .dark .bg-white, .dark .bg-gray-50, .dark .bg-gray-100,
+        .dark .bg-slate-50, .dark .bg-slate-100, .dark .card, .dark .panel,
+        .dark input, .dark textarea, .dark select {
+            transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+        }
+
         /* Global Dark Mode Styles for Content Areas - Match Topbar */
         .dark main {
             background-color: #2d2d2d !important; /* Sama dengan topbar */
@@ -398,7 +481,8 @@
                 </div>
                 
                 <!-- Dark Mode Toggle -->
-                <button id="dark-mode-toggle" class="sidebar-item w-full group relative">
+                <!-- <button id="dark-mode-toggle" class="sidebar-item w-full group relative"> -->
+                <button id="" class="sidebar-item w-full group relative">
                     <i data-lucide="moon" id="dark-icon" class="w-5 h-5 transition-colors shrink-0"></i>
                     <i data-lucide="sun" id="light-icon" class="w-5 h-5 transition-colors shrink-0 hidden"></i>
                     <span class="nav-text ml-3 h-5 font-medium">Mode Gelap</span>
@@ -836,37 +920,36 @@
         const html = document.documentElement;
 
         // Check for saved theme preference or default to 'light'
-        const currentTheme = localStorage.getItem('theme') || 'light';
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         
-        // Apply saved theme on page load
+        // Apply saved/system theme on page load (FOUC sudah diminimalkan lewat script di <head>)
         if (currentTheme === 'dark') {
             html.classList.add('dark');
-            darkIcon.classList.add('hidden');
-            lightIcon.classList.remove('hidden');
-            // Update text jika sidebar expanded
-            const navText = darkModeToggle.querySelector('.nav-text');
-            if (navText) navText.textContent = 'Mode Terang';
+        } else {
+            html.classList.remove('dark');
         }
+        // Sinkronisasi ikon & teks awal
+        (function syncToggleUI() {
+            const isDark = html.classList.contains('dark');
+            darkIcon.classList.toggle('hidden', isDark);
+            lightIcon.classList.toggle('hidden', !isDark);
+            const navText = darkModeToggle.querySelector('.nav-text');
+            if (navText) navText.textContent = isDark ? 'Mode Terang' : 'Mode Gelap';
+        })();
 
         // Toggle dark mode on button click
+        darkModeToggle.setAttribute('aria-pressed', html.classList.contains('dark'));
         darkModeToggle.addEventListener('click', function() {
-            html.classList.toggle('dark');
-            
-            // Toggle icons
-            darkIcon.classList.toggle('hidden');
-            lightIcon.classList.toggle('hidden');
-            
-            // Update text
+            const nowDark = !html.classList.contains('dark');
+            html.classList.toggle('dark', nowDark);
+            localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+            darkModeToggle.setAttribute('aria-pressed', nowDark);
+            // Update UI konsisten
             const navText = this.querySelector('.nav-text');
-            if (html.classList.contains('dark')) {
-                localStorage.setItem('theme', 'dark');
-                if (navText) navText.textContent = 'Mode Terang';
-            } else {
-                localStorage.setItem('theme', 'light');
-                if (navText) navText.textContent = 'Mode Gelap';
-            }
-            
-            // Recreate Lucide icons after toggle
+            if (navText) navText.textContent = nowDark ? 'Mode Terang' : 'Mode Gelap';
+            darkIcon.classList.toggle('hidden', nowDark);
+            lightIcon.classList.toggle('hidden', !nowDark);
+            // Re-render ikon lucide
             lucide.createIcons();
         });
     </script>

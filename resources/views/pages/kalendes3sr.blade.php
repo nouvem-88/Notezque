@@ -1,6 +1,7 @@
 @extends('layouts.main-nav')
 
 @section('title', 'Kalender')
+@section('subtitle', 'Lihat dan kelola aktivitas Anda dengan mudah menggunakan kalender interaktif kami.')
 
 @section('content')
     <!DOCTYPE html>
