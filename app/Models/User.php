@@ -22,8 +22,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+<<<<<<< HEAD
+        'profile_photo'
+=======
         'is_admin',
         'last_login_at',
+>>>>>>> 16e7fbe113bffddf63f3bfdc74f907a1e55d9070
     ];
 
     /**

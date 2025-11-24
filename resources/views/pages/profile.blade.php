@@ -30,15 +30,34 @@
             <!-- Profile Card -->
             <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 mb-6 border border-blue-100">
                 <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
-                    <div class="relative">
-                        <img src="https://placehold.co/120x120/6366F1/FFFFFF?text={{ strtoupper(substr($user->name, 0, 1)) }}" 
+
+                    <!-- FOTO PROFIL + UPLOAD -->
+                    <div class="relative group">
+                        <img 
+                            src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : 'https://placehold.co/120x120/6366F1/FFFFFF?text=' . strtoupper(substr($user->name, 0, 1)) }}" 
                             alt="Profile Picture" 
-                            class="w-32 h-32 rounded-2xl border-4 border-white shadow-xl">
-                        <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
-                            <i data-lucide="check" class="w-5 h-5 text-white"></i>
-                        </div>
+                            class="w-32 h-32 rounded-2xl border-4 border-white shadow-xl object-cover"
+                        >
+
+                        <!-- Hover icon -->
+                        <label for="uploadPhoto" 
+                               class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
+                                      flex items-center justify-center rounded-2xl cursor-pointer transition">
+                            <i data-lucide="camera" class="text-white w-6 h-6"></i>
+                        </label>
                     </div>
 
+                    <!-- Hidden upload form -->
+                    <form 
+                        action="{{ route('profile.updatePhoto') }}" 
+                        method="POST" 
+                        enctype="multipart/form-data" 
+                        class="hidden">
+                        @csrf
+                        <input type="file" id="uploadPhoto" name="profile_photo" accept="image/*"
+                               onchange="this.form.submit()">
+                    </form>
+                    <!-- USER INFO -->
                     <div class="flex-1 text-center md:text-left">
                         <h2 class="text-3xl font-bold text-slate-800 mb-2">{{ $user->name }}</h2>
                         <p class="text-slate-600 mb-4 flex items-center justify-center md:justify-start gap-2">

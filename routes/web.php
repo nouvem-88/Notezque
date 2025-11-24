@@ -93,3 +93,10 @@ Route::middleware('auth')->group(function () {
         Route::get('statistics', [AdminStatistikController::class, 'index'])->name('statistics');
     });
 });
+
+// profile photo routes
+
+Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])
+    ->name('profile.updatePhoto')
+    ->middleware('auth');
+
