@@ -512,8 +512,10 @@
 
                     <!-- Nama Halaman -->
                     <div class="mr-auto">
+                        @if (! View::hasSection('disableGlobalVariabel')) 
                         <h1 class="text-2xl font-bold text-slate-800">@yield('title', 'Ganti ini')</h1>
                         <p class="text-xs text-slate-500 font-medium mt-0.5">@yield('subtitle', 'Kelola produktivitas Anda')</p>
+                        @endif
                     </div>
 
                     <!-- Search Bar (Pusat) -->
