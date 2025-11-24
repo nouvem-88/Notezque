@@ -168,11 +168,16 @@
                 <a href="/" class="flex items-center space-x-3 group">
                     <div class="relative">
                         <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                        <img src="{{ url('logo.png') }}" alt="Notezque Logo" class="relative h-11 w-auto transition-transform duration-300 group-hover:scale-105"/>
+                        @php
+                            $logo = \App\Models\KontenStatis::where('key', 'site_logo')->first();
+                            $siteName = \App\Models\KontenStatis::where('key', 'site_name')->first();
+                            $tagline = \App\Models\KontenStatis::where('key', 'site_tagline')->first();
+                        @endphp
+                        <img src="{{ $logo ? url($logo->value) : url('logo.png') }}" alt="{{ $siteName ? $siteName->value : 'Notezque' }} Logo" class="relative h-11 w-auto transition-transform duration-300 group-hover:scale-105"/>
                     </div>
                     <div class="hidden sm:block">
-                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Notezque</span>
-                        <p class="text-[10px] text-slate-500 font-medium -mt-1">Productivity Hub</p>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">{{ $siteName ? $siteName->value : 'Notezque' }}</span>
+                        <p class="text-[10px] text-slate-500 font-medium -mt-1">{{ $tagline ? $tagline->value : 'Productivity Hub' }}</p>
                     </div>
                 </a>
 
@@ -239,10 +244,14 @@
             <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
                 <!-- Copyright -->
                 <div class="text-center sm:text-left">
+                    @php
+                        $copyright = \App\Models\KontenStatis::where('key', 'footer_copyright')->first();
+                        $footerSubtitle = \App\Models\KontenStatis::where('key', 'footer_subtitle')->first();
+                    @endphp
                     <p class="text-xs text-slate-600 font-medium">
-                        &copy; 2025 <span class="font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Notezque</span>. All Rights Reserved.
+                        {{ $copyright ? $copyright->value : '© 2025 Notezque. All Rights Reserved.' }}
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-0.5">Platform Manajemen Tugas dan Produktivitas Akademik</p>
+                    <p class="text-[10px] text-slate-400 mt-0.5">{{ $footerSubtitle ? $footerSubtitle->value : 'Platform Manajemen Tugas dan Produktivitas Akademik' }}</p>
                 </div>
                 
                 <!-- Quick Links -->

@@ -1,6 +1,9 @@
+<<<<<<< HEAD
+=======
 @extends('layouts.main-nav')
 
 @section('title', 'Kalender')
+@section('subtitle', 'Lihat dan kelola aktivitas Anda dengan mudah menggunakan kalender interaktif kami.')
 
 @section('content')
     <!DOCTYPE html>
@@ -644,3 +647,4 @@
     </html>
 
 @endsection
+>>>>>>> 0f8b03d4ff3448da4d3ff9b4c4be1a9281174c4a
