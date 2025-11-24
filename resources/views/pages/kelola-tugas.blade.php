@@ -103,7 +103,7 @@
                                             </button>
                                         </form>
                                         @endif
-                                        <button onclick="editTask({{ $task->id }}, '{{ addslashes($task->title) }}', '{{ addslashes($task->description) }}', '{{ $task->due_date }}', '{{ $task->priority }}', '{{ $task->status }}')"
+                                        <button onclick="editTask('{{ $task->id }}', '{{ addslashes($task->title) }}', '{{ addslashes($task->description) }}', '{{ $task->due_date }}', '{{ $task->priority }}', '{{ $task->status }}')"
                                             class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition" title="Edit">
                                             <i data-lucide="edit" class="w-4 h-4"></i>
                                         </button>
