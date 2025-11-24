@@ -14,6 +14,10 @@ use App\Http\Controllers\{
     AdminUserController,
     AdminKontenController,
     AdminStatistikController,
+<<<<<<< HEAD
+=======
+    ProfileController
+>>>>>>> 128adbd9b9db7a8a20a7f24680eb33b64500d2ef
 };
 
 /*

@@ -546,12 +546,12 @@
                     <!-- Gunakan placeholder image karena asset('logo.png') tidak tersedia di sini -->
                     <div class="relative">
                         <div class="absolute inset-0 bg-blue-500 rounded-xl blur-md opacity-20 group-hover:opacity-30 transition-opacity"></div>
-                        <img src="{{ 'logo.png' }}" alt="Notezque Logo"
+                        <img src="{{ $kontenStatis['site_logo'] ?? 'logo.png' }}" alt="{{ $kontenStatis['site_name'] ?? 'Notezque' }} Logo"
                             class="relative h-11 w-auto transition-transform duration-500 group-hover:scale-105 logo-img-expanded drop-shadow-lg" />
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent logo-text">NotezQue</span>
-                        <span class="text-[10px] text-slate-500 font-medium logo-text">Productivity Hub</span>
+                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent logo-text">{{ $kontenStatis['site_name'] ?? 'NotezQue' }}</span>
+                        <span class="text-[10px] text-slate-500 font-medium logo-text">{{ $kontenStatis['site_tagline'] ?? 'Productivity Hub' }}</span>
                     </div>
                 </div>
 
@@ -559,7 +559,7 @@
                 <div id="logo-header-collapsed" class="hidden justify-center logo-header-collapsed">
                     <div class="relative">
                         <div class="absolute inset-0 bg-blue-500 rounded-xl blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                        <img src="{{ 'logo.png' }}" alt="Notezque Logo Collapsed"
+                        <img src="{{ $kontenStatis['site_logo'] ?? 'logo.png' }}" alt="{{ $kontenStatis['site_name'] ?? 'Notezque' }} Logo Collapsed"
                             class="relative h-11 w-11 rounded-xl logo-img-collapsed transition-transform duration-500 group-hover:scale-110 drop-shadow-lg" />
                     </div>
                 </div>
@@ -645,8 +645,10 @@
 
                     <!-- Nama Halaman -->
                     <div class="mr-auto">
+                        @if (! View::hasSection('disableGlobalVariabel')) 
                         <h1 class="text-2xl font-bold text-slate-800">@yield('title', 'Ganti ini')</h1>
                         <p class="text-xs text-slate-500 font-medium mt-0.5">@yield('subtitle', 'Kelola produktivitas Anda')</p>
+                        @endif
                     </div>
 
                     <!-- Search Bar (Pusat) -->
@@ -827,9 +829,9 @@
                         <!-- Copyright -->
                         <div class="text-center sm:text-left">
                             <p class="text-xs text-slate-600 font-medium">
-                                &copy; 2025 <span class="font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">NotezQue</span>. All Rights Reserved.
+                                &copy; 2025 <span class="font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{{ $kontenStatis['site_name'] ?? 'NotezQue' }}</span>. {{ $kontenStatis['footer_copyright'] ?? 'All Rights Reserved.' }}
                             </p>
-                            <p class="text-[10px] text-slate-400 mt-0.5">Platform Manajemen Tugas dan Produktivitas Akademik</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">{{ $kontenStatis['footer_subtitle'] ?? 'Platform Manajemen Tugas dan Produktivitas Akademik' }}</p>
                         </div>
 
                         <!-- Quick Links -->
