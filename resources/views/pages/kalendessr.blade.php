@@ -1,5 +1,8 @@
 @extends('layouts.main-nav')
 
+@section('title', 'Kalender')
+@section('subtitle', 'Lihat dan kelola aktivitas Anda dengan mudah menggunakan kalender interaktif kami.')
+
 @section('content')
 <div class="min-h-screen">
     <main class="flex-grow bg-white rounded-tl-3xl p-6 md:p-10">
