@@ -77,7 +77,21 @@ Route::middleware('auth')->group(function () {
     });
 
     // Materi Routes
-    Route::get('/materi', [MateriController::class, 'index'])->name('materi');
+    Route::controller(MateriController::class)->prefix('materi')->name('materi.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        
+        // Folder routes
+        Route::post('/folder', 'storeFolder')->name('folder.store');
+        Route::put('/folder/{id}', 'updateFolder')->name('folder.update');
+        Route::delete('/folder/{id}', 'deleteFolder')->name('folder.delete');
+        
+        // File routes
+        Route::post('/file', 'uploadFile')->name('file.upload');
+        Route::get('/file/{id}/download', 'downloadFile')->name('file.download');
+        Route::get('/file/{id}/preview', 'previewFile')->name('file.preview');
+        Route::put('/file/{id}', 'renameFile')->name('file.rename');
+        Route::delete('/file/{id}', 'deleteFile')->name('file.delete');
+    });
 
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         // Dashboard Admin
