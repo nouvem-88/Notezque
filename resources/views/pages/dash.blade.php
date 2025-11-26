@@ -1,4 +1,5 @@
 @extends('layouts.main-nav')
+@section('disableGlobalVariabel', true)
 
 @section('title', 'Dashboard')
 @section('content')

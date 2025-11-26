@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\KontenStatis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,8 @@ class TugasController extends Controller
         }
 
         $tasks = Auth::user()->tasks()->latest()->get();
-        return view('pages.kelola-tugas', compact('tasks'));
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+        return view('pages.kelola-tugas', compact('tasks', 'kontenStatis'));
     }
 
     public function store(Request $request)

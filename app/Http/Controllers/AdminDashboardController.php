@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Note;
 use App\Models\Activity;
 use App\Models\Task;
+use App\Models\KontenStatis;
 
 class AdminDashboardController extends Controller
 {
@@ -26,12 +27,16 @@ class AdminDashboardController extends Controller
                           ->take(5)
                           ->get();
 
+        // Konten statis
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+
         return view('admin.dashboard', compact(
             'totalUsers', 
             'activeUsers', 
             'totalNotes', 
             'totalActivities',
-            'recentUsers'
+            'recentUsers',
+            'kontenStatis'
         ));
     }
 }

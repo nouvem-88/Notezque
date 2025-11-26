@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\KontenStatis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,8 @@ class CatatanController extends Controller
     public function index()
     {
         $notes = Auth::user()->notes()->latest()->get();
-        return view('pages.catatan', compact('notes'));
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+        return view('pages.catatan', compact('notes', 'kontenStatis'));
     }
 
     // Menyimpan catatan baru

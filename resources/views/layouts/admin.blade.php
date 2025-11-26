@@ -12,11 +12,11 @@
         <!-- Sidebar -->
         <aside class="w-64 bg-white shadow-lg flex-shrink-0 hidden md:flex flex-col">
             <div class="p-6 border-b border-gray-200">
-                <h1 class="text-2xl font-bold text-blue-600 flex items-center">
-                    <i class="fas fa-clipboard-list mr-2"></i>
-                    NotezQue
+                <h1 class="text-2xl font-bold text-blue-600 flex items-center space-x-2">
+                    <img src="{{ $kontenStatis['site_logo'] ?? 'logo.png' }}" alt="{{ $kontenStatis['site_name'] ?? 'Notezque' }} Logo" class="h-8 w-auto">
+                    <span>{{ $kontenStatis['site_name'] ?? 'NotezQue' }}</span>
                 </h1>
-                <p class="text-xs text-gray-500 mt-1">Productivity Organizer</p>
+                <p class="text-xs text-gray-500 mt-1">{{ $kontenStatis['site_tagline'] ?? 'Productivity Organizer' }}</p>
             </div>
             
             <nav class="flex-1 p-4 space-y-2">
@@ -71,13 +71,32 @@
                         </button>
                         
                         <!-- Profil Admin -->
-                        <div class="flex items-center space-x-3 pl-3 border-l border-gray-200">
-                            <div class="text-right">
-                                <p class="text-sm font-semibold text-gray-800">Admin NotezQue</p>
-                                <p class="text-xs text-gray-500">Administrator</p>
-                            </div>
-                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-                                AN
+                        <div class="relative">
+                            <button onclick="toggleProfileDropdown()" class="flex items-center space-x-3 pl-3 border-l border-gray-200 hover:bg-gray-100 p-2 rounded-lg transition-colors">
+                                <div class="text-right">
+                                    <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ Auth::user()->is_admin ? 'Administrator' : 'User' }}</p>
+                                </div>
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                                </div>
+                                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                            </button>
+                            
+                            <!-- Dropdown Menu -->
+                            <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                                <div class="px-4 py-3 border-b border-gray-200">
+                                    <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                                </div>
+
+                                <div class="border-t border-gray-200 my-2"></div>
+                                <form action="{{ route('logout') }}" method="GET" class="block">
+                                    <button type="submit" class="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                        <i class="fas fa-sign-out-alt mr-3 w-4"></i>
+                                        Keluar
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -90,5 +109,22 @@
             </main>
         </div>
     </div>
+    
+    <script>
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const button = event.target.closest('button[onclick="toggleProfileDropdown()"]');
+            
+            if (!button && dropdown && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>

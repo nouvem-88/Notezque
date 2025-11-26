@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\KontenStatis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,9 +17,11 @@ class KalenderController extends Controller
 
         // Ambil semua aktivitas user, sorted by date
         $allActivities = Auth::user()->activities()->orderBy('date', 'asc')->get();
+        $kontenStatis = KontenStatis::pluck('value', 'key');
 
         return view('pages.kalendessr', [
             'aktivitasBulanIni' => $allActivities,
+            'kontenStatis' => $kontenStatis,
         ]);
     }
 

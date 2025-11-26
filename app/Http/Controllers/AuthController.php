@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\KontenStatis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -153,9 +154,13 @@ class AuthController extends Controller
             ->orderBy('date')
             ->get();
 
+        // Ambil konten statis
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+
         return view('pages.dash', [
             'acaraMendatang' => $acaraMendatang,
             'semua_aktivitas' => $semua_aktivitas,
+            'kontenStatis' => $kontenStatis,
         ]);
     }
 
@@ -170,7 +175,10 @@ class AuthController extends Controller
             return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        return view('pages.profile', compact('user'));
+        // Ambil konten statis
+        $kontenStatis = KontenStatis::pluck('value', 'key');
+
+        return view('pages.profile', compact('user', 'kontenStatis'));
     }
 
     // -------------------------------

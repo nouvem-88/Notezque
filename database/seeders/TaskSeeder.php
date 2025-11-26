@@ -48,38 +48,6 @@ class TaskSeeder extends Seeder
                 'status' => 'in_progress',
                 'completed_at' => null,
             ],
-            [
-                'title' => 'Kumpulkan Laporan Praktikum',
-                'description' => 'Laporan praktikum modul 3 tentang algoritma sorting.',
-                'due_date' => Carbon::now()->addDays(2),
-                'priority' => 'high',
-                'status' => 'pending',
-                'completed_at' => null,
-            ],
-            [
-                'title' => 'Review Code Teman Kelompok',
-                'description' => 'Review pull request dari Sarah tentang fitur login.',
-                'due_date' => Carbon::now()->addDays(1),
-                'priority' => 'medium',
-                'status' => 'pending',
-                'completed_at' => null,
-            ],
-            [
-                'title' => 'Daftar Seminar Teknologi',
-                'description' => 'Daftar seminar "Future of Web Development" yang diadakan kampus.',
-                'due_date' => Carbon::now()->addDays(4),
-                'priority' => 'low',
-                'status' => 'pending',
-                'completed_at' => null,
-            ],
-            [
-                'title' => 'Update Portfolio Website',
-                'description' => 'Tambahkan proyek terbaru ke portfolio dan update CV.',
-                'due_date' => Carbon::now()->addDays(10),
-                'priority' => 'low',
-                'status' => 'pending',
-                'completed_at' => null,
-            ],
             
             // Tugas yang sudah selesai
             [

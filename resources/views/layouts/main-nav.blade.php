@@ -29,7 +29,10 @@
                     },
                     keyframes: {
                         'ping-slow': {
-                            '75%, 100%': { transform: 'scale(1.5)', opacity: '0' },
+                            '75%, 100%': {
+                                transform: 'scale(1.5)',
+                                opacity: '0'
+                            },
                         }
                     },
                     animation: {
@@ -108,7 +111,7 @@
         /* Menghapus border saat collapsed untuk tampilan minimalis */
         .sidebar-collapsed .border-b,
         .sidebar-collapsed .border-t {
-                border-color: transparent !important;
+            border-color: transparent !important;
         }
 
 
@@ -240,30 +243,97 @@
 
         /* --- Generic Utility Overrides (Gray & Slate families) --- */
         /* Backgrounds */
-        .dark .bg-white { background-color: #2d2d2d !important; }
-        .dark .bg-gray-50, .dark .bg-slate-50 { background-color: #262626 !important; }
-        .dark .bg-gray-100, .dark .bg-slate-100 { background-color: #2f2f2f !important; }
-        .dark .bg-gray-200, .dark .bg-slate-200 { background-color: #383838 !important; }
-        .dark .bg-gray-300, .dark .bg-slate-300 { background-color: #404040 !important; }
+        .dark .bg-white {
+            background-color: #2d2d2d !important;
+        }
+
+        .dark .bg-gray-50,
+        .dark .bg-slate-50 {
+            background-color: #262626 !important;
+        }
+
+        .dark .bg-gray-100,
+        .dark .bg-slate-100 {
+            background-color: #2f2f2f !important;
+        }
+
+        .dark .bg-gray-200,
+        .dark .bg-slate-200 {
+            background-color: #383838 !important;
+        }
+
+        .dark .bg-gray-300,
+        .dark .bg-slate-300 {
+            background-color: #404040 !important;
+        }
 
         /* Text (elevated scale) */
-        .dark .text-gray-900, .dark .text-slate-900 { color: #f8fafc !important; }
-        .dark .text-gray-800, .dark .text-slate-800 { color: #f1f5f9 !important; }
-        .dark .text-gray-700, .dark .text-slate-700 { color: #e2e8f0 !important; }
-        .dark .text-gray-600, .dark .text-slate-600 { color: #cbd5e1 !important; }
-        .dark .text-gray-500, .dark .text-slate-500 { color: #94a3b8 !important; }
-        .dark .text-gray-400, .dark .text-slate-400 { color: #64748b !important; }
+        .dark .text-gray-900,
+        .dark .text-slate-900 {
+            color: #f8fafc !important;
+        }
+
+        .dark .text-gray-800,
+        .dark .text-slate-800 {
+            color: #f1f5f9 !important;
+        }
+
+        .dark .text-gray-700,
+        .dark .text-slate-700 {
+            color: #e2e8f0 !important;
+        }
+
+        .dark .text-gray-600,
+        .dark .text-slate-600 {
+            color: #cbd5e1 !important;
+        }
+
+        .dark .text-gray-500,
+        .dark .text-slate-500 {
+            color: #94a3b8 !important;
+        }
+
+        .dark .text-gray-400,
+        .dark .text-slate-400 {
+            color: #64748b !important;
+        }
 
         /* Borders & Dividers */
-        .dark .border-gray-100, .dark .border-slate-100 { border-color: #2f2f2f !important; }
-        .dark .border-gray-200, .dark .border-slate-200 { border-color: #383838 !important; }
-        .dark .border-gray-300, .dark .border-slate-300 { border-color: #404040 !important; }
-        .dark .divide-gray-100 > * + *, .dark .divide-slate-100 > * + * { border-color: #2f2f2f !important; }
+        .dark .border-gray-100,
+        .dark .border-slate-100 {
+            border-color: #2f2f2f !important;
+        }
+
+        .dark .border-gray-200,
+        .dark .border-slate-200 {
+            border-color: #383838 !important;
+        }
+
+        .dark .border-gray-300,
+        .dark .border-slate-300 {
+            border-color: #404040 !important;
+        }
+
+        .dark .divide-gray-100>*+*,
+        .dark .divide-slate-100>*+* {
+            border-color: #2f2f2f !important;
+        }
 
         /* Hover states unify for subtle surfaces */
-        .dark .hover\:bg-gray-50:hover, .dark .hover\:bg-slate-50:hover { background-color: #313131 !important; }
-        .dark .hover\:bg-gray-100:hover, .dark .hover\:bg-slate-100:hover { background-color: #3a3a3a !important; }
-        .dark .hover\:bg-gray-200:hover, .dark .hover\:bg-slate-200:hover { background-color: #454545 !important; }
+        .dark .hover\:bg-gray-50:hover,
+        .dark .hover\:bg-slate-50:hover {
+            background-color: #313131 !important;
+        }
+
+        .dark .hover\:bg-gray-100:hover,
+        .dark .hover\:bg-slate-100:hover {
+            background-color: #3a3a3a !important;
+        }
+
+        .dark .hover\:bg-gray-200:hover,
+        .dark .hover\:bg-slate-200:hover {
+            background-color: #454545 !important;
+        }
 
         /* Form elements (common) */
         .dark input[type="text"],
@@ -275,44 +345,107 @@
             color: #e5e7eb !important;
             border-color: #404040 !important;
         }
-        .dark input::placeholder, .dark textarea::placeholder { color: #64748b !important; }
-        .dark input:focus, .dark textarea:focus, .dark select:focus { outline: none; border-color: #3385ff !important; box-shadow: 0 0 0 1px #3385ff40; }
+
+        .dark input::placeholder,
+        .dark textarea::placeholder {
+            color: #64748b !important;
+        }
+
+        .dark input:focus,
+        .dark textarea:focus,
+        .dark select:focus {
+            outline: none;
+            border-color: #3385ff !important;
+            box-shadow: 0 0 0 1px #3385ff40;
+        }
 
         /* Buttons (semantic adjustments) */
-        .dark .btn-primary { background-color: #3385ff !important; color: #fff !important; }
-        .dark .btn-secondary { background-color: #4b5563 !important; color: #e5e7eb !important; }
-        .dark .btn-danger { background-color: #dc2626 !important; color: #fff !important; }
-        .dark .btn-primary:hover { background-color: #1d72e8 !important; }
-        .dark .btn-secondary:hover { background-color: #64748b !important; }
-        .dark .btn-danger:hover { background-color: #b91c1c !important; }
+        .dark .btn-primary {
+            background-color: #3385ff !important;
+            color: #fff !important;
+        }
+
+        .dark .btn-secondary {
+            background-color: #4b5563 !important;
+            color: #e5e7eb !important;
+        }
+
+        .dark .btn-danger {
+            background-color: #dc2626 !important;
+            color: #fff !important;
+        }
+
+        .dark .btn-primary:hover {
+            background-color: #1d72e8 !important;
+        }
+
+        .dark .btn-secondary:hover {
+            background-color: #64748b !important;
+        }
+
+        .dark .btn-danger:hover {
+            background-color: #b91c1c !important;
+        }
 
         /* Table adjustments */
-        .dark table { color: #e5e7eb; }
-        .dark thead { background-color: #2d2d2d; }
-        .dark tbody tr { border-color: #383838; }
-        .dark tbody tr:hover { background-color: #313131; }
+        .dark table {
+            color: #e5e7eb;
+        }
+
+        .dark thead {
+            background-color: #2d2d2d;
+        }
+
+        .dark tbody tr {
+            border-color: #383838;
+        }
+
+        .dark tbody tr:hover {
+            background-color: #313131;
+        }
 
         /* Code / pre blocks */
-        .dark pre, .dark code { background-color: #262626 !important; color: #e5e7eb !important; }
-        .dark pre { border: 1px solid #383838 !important; }
+        .dark pre,
+        .dark code {
+            background-color: #262626 !important;
+            color: #e5e7eb !important;
+        }
+
+        .dark pre {
+            border: 1px solid #383838 !important;
+        }
 
         /* Cards generic */
-        .dark .card, .dark .panel, .dark .widget { background-color: #2d2d2d !important; border-color: #383838 !important; }
+        .dark .card,
+        .dark .panel,
+        .dark .widget {
+            background-color: #2d2d2d !important;
+            border-color: #383838 !important;
+        }
 
         /* Utility for smooth transitions across newly added elements */
-        .dark .bg-white, .dark .bg-gray-50, .dark .bg-gray-100,
-        .dark .bg-slate-50, .dark .bg-slate-100, .dark .card, .dark .panel,
-        .dark input, .dark textarea, .dark select {
+        .dark .bg-white,
+        .dark .bg-gray-50,
+        .dark .bg-gray-100,
+        .dark .bg-slate-50,
+        .dark .bg-slate-100,
+        .dark .card,
+        .dark .panel,
+        .dark input,
+        .dark textarea,
+        .dark select {
             transition: background-color .3s ease, color .3s ease, border-color .3s ease;
         }
 
         /* Global Dark Mode Styles for Content Areas - Match Topbar */
         .dark main {
-            background-color: #2d2d2d !important; /* Sama dengan topbar */
+            background-color: #2d2d2d !important;
+            /* Sama dengan topbar */
         }
 
         .dark .bg-white {
-            background-color: #3d3d3d !important; /* Card lebih terang sedikit dari background */
+            background-color: #3d3d3d !important;
+            /* Card lebih terang sedikit dari background */
         }
 
         .dark .bg-slate-50 {
@@ -324,7 +457,8 @@
         }
 
         .dark .text-slate-800 {
-            color: #f8fafc !important; /* White untuk heading */
+            color: #f8fafc !important;
+            /* White untuk heading */
         }
 
         .dark .text-slate-700 {
@@ -351,7 +485,7 @@
             border-color: #525252 !important;
         }
 
-        .dark .divide-slate-100 > * + * {
+        .dark .divide-slate-100>*+* {
             border-color: #4a4a4a !important;
         }
 
@@ -413,12 +547,12 @@
                     <!-- Gunakan placeholder image karena asset('logo.png') tidak tersedia di sini -->
                     <div class="relative">
                         <div class="absolute inset-0 bg-blue-500 rounded-xl blur-md opacity-20 group-hover:opacity-30 transition-opacity"></div>
-                        <img src="{{ 'logo.png' }}" alt="Notezque Logo"
+                        <img src="{{ $kontenStatis['site_logo'] ?? 'logo.png' }}" alt="{{ $kontenStatis['site_name'] ?? 'Notezque' }} Logo"
                             class="relative h-11 w-auto transition-transform duration-500 group-hover:scale-105 logo-img-expanded drop-shadow-lg" />
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent logo-text">NotezQue</span>
-                        <span class="text-[10px] text-slate-500 font-medium logo-text">Productivity Hub</span>
+                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent logo-text">{{ $kontenStatis['site_name'] ?? 'NotezQue' }}</span>
+                        <span class="text-[10px] text-slate-500 font-medium logo-text">{{ $kontenStatis['site_tagline'] ?? 'Productivity Hub' }}</span>
                     </div>
                 </div>
 
@@ -426,7 +560,7 @@
                 <div id="logo-header-collapsed" class="hidden justify-center logo-header-collapsed">
                     <div class="relative">
                         <div class="absolute inset-0 bg-blue-500 rounded-xl blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                        <img src="{{ 'logo.png' }}" alt="Notezque Logo Collapsed"
+                        <img src="{{ $kontenStatis['site_logo'] ?? 'logo.png' }}" alt="{{ $kontenStatis['site_name'] ?? 'Notezque' }} Logo Collapsed"
                             class="relative h-11 w-11 rounded-xl logo-img-collapsed transition-transform duration-500 group-hover:scale-110 drop-shadow-lg" />
                     </div>
                 </div>
@@ -480,16 +614,15 @@
                 <div class="nav-text px-3 mb-3">
                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pengaturan</p>
                 </div>
-                
+
                 <!-- Dark Mode Toggle -->
-                <!-- <button id="dark-mode-toggle" class="sidebar-item w-full group relative"> -->
-                <button id="" class="sidebar-item w-full group relative">
+                <button id="dark-mode-toggle" class="sidebar-item w-full group relative" aria-label="Toggle dark mode">
                     <i data-lucide="moon" id="dark-icon" class="w-5 h-5 transition-colors shrink-0"></i>
                     <i data-lucide="sun" id="light-icon" class="w-5 h-5 transition-colors shrink-0 hidden"></i>
                     <span class="nav-text ml-3 h-5 font-medium">Mode Gelap</span>
                     <div class="nav-text absolute right-3 w-1.5 h-1.5 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </button>
-                
+
                 <a href="{{ url('/') }}" class="sidebar-item mt-1.5 group relative hover:bg-red-50 hover:text-red-600">
                     <i data-lucide="log-out" class="w-5 h-5 transition-colors shrink-0"></i>
                     <span class="nav-text ml-3 h-5 font-medium">Logout</span>
@@ -513,8 +646,10 @@
 
                     <!-- Nama Halaman -->
                     <div class="mr-auto">
+                        @if (! View::hasSection('disableGlobalVariabel')) 
                         <h1 class="text-2xl font-bold text-slate-800">@yield('title', 'Ganti ini')</h1>
                         <p class="text-xs text-slate-500 font-medium mt-0.5">@yield('subtitle', 'Kelola produktivitas Anda')</p>
+                        @endif
                     </div>
 
                     <!-- Search Bar (Pusat) -->
@@ -538,11 +673,11 @@
                                     <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                                 </span>
                             </button>
-                        
+
                             <!-- 🔽 Dropdown Notifikasi -->
                             <div id="notif-dropdown"
                                 class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl border border-slate-200 opacity-0 pointer-events-none transition-all duration-200 transform origin-top-right scale-95 z-50">
-                                
+
                                 <!-- Header -->
                                 <div class="px-5 py-4 border-b border-slate-200">
                                     <div class="flex items-center justify-between">
@@ -550,7 +685,7 @@
                                         <span class="px-2 py-1 bg-red-100 text-red-600 text-xs font-semibold rounded-full">3 Baru</span>
                                     </div>
                                 </div>
-                        
+
                                 <!-- Notification Items -->
                                 <div class="max-h-80 overflow-y-auto divide-y divide-slate-100">
                                     <!-- Unread Notification 1 -->
@@ -614,7 +749,7 @@
                                         </div>
                                     </div>
                                 </div>
-                        
+
                                 <!-- Footer -->
                                 <div class="border-t border-slate-200 p-3 bg-slate-50 rounded-b-xl">
                                     <div class="flex items-center justify-between">
@@ -629,19 +764,23 @@
                             </div>
                         </div>
 
-                        <!-- Edit/Quick Action -->
-                        <!-- <div class="top-nav-icon group">
-                            <i data-lucide="edit"
-                                class="w-5 h-5 text-gray-500 transition duration-200 group-hover:text-v4-secondary"></i>
-                        </div> -->
-
+                        @php
+                            $user = auth()->user();
+                            $initial = $user && $user->name ? strtoupper(substr($user->name, 0,strlen($user->name))) : 'U';
+                            $profileUrl = ($user && $user->profile_photo)
+                                ? asset('storage/' . $user->profile_photo)
+                                : "https://placehold.co/120x120/6366F1/FFFFFF?text={$initial}";
+                        @endphp
                         <!-- Profile Dropdown Trigger -->
                         <div id="profile-dropdown-trigger" class="relative">
                             <div class="flex items-center space-x-2 ml-4 cursor-pointer p-1 rounded-full hover:bg-v4-subtle transition duration-200"
                                 aria-expanded="false" aria-controls="profile-dropdown-menu">
-                                <img src="https://placehold.co/40x40/A8A8E6/FFFFFF?text=B" alt="Profile"
-                                    class="h-10 w-10 rounded-full object-cover border-2 border-v4-secondary shadow-md">
-                                <span class="text-sm font-medium text-v4-text hidden lg:inline">Halo, Pengguna!</span>
+                                <img
+                                    src="{{ $profileUrl }}"
+                                    alt="Profile Picture"
+                                    class="w-10 h-10 rounded-full shadow-xl object-cover"
+                                    loading="lazy">
+                                <span class="text-sm font-medium text-v4-text hidden lg:inline">Halo, {{ $initial }}</span>
                                 <i data-lucide="chevron-down"
                                     class="w-4 h-4 text-gray-500 hidden lg:inline transition-transform duration-200"
                                     id="profile-arrow"></i>
@@ -674,8 +813,8 @@
             <!-- Main Content Area (Overflow-y for content) -->
             <main id="main-content" class="flex-1 overflow-x-hidden overflow-y-auto  bg-v4-background">
                 <!-- Tambahkan Konten Dashboard di sini -->
-                    @yield('content')
-                    
+                @yield('content')
+
             </main>
 
             <!-- 3. Footer-->
@@ -685,11 +824,11 @@
                         <!-- Copyright -->
                         <div class="text-center sm:text-left">
                             <p class="text-xs text-slate-600 font-medium">
-                                &copy; 2025 <span class="font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">NotezQue</span>. All Rights Reserved.
+                                &copy; 2025 <span class="font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{{ $kontenStatis['site_name'] ?? 'NotezQue' }}</span>. {{ $kontenStatis['footer_copyright'] ?? 'All Rights Reserved.' }}
                             </p>
-                            <p class="text-[10px] text-slate-400 mt-0.5">Platform Manajemen Tugas dan Produktivitas Akademik</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">{{ $kontenStatis['footer_subtitle'] ?? 'Platform Manajemen Tugas dan Produktivitas Akademik' }}</p>
                         </div>
-                        
+
                         <!-- Quick Links -->
                         <div class="flex items-center gap-4 text-xs">
                             <a href="#" class="text-slate-500 hover:text-blue-600 font-medium transition-colors">Bantuan</a>
@@ -922,7 +1061,7 @@
 
         // Check for saved theme preference or default to 'light'
         const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
+
         // Apply saved/system theme on page load (FOUC sudah diminimalkan lewat script di <head>)
         if (currentTheme === 'dark') {
             html.classList.add('dark');

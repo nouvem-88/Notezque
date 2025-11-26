@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
             TaskSeeder::class,
             ActivitySeeder::class,
             AdminSeeder::class,
+            FolderSeeder::class,
+            FileSeeder::class,
         ]);
     }
 }

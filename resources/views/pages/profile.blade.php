@@ -1,31 +1,11 @@
 @extends('layouts.main-nav')
+@section('title', 'Profil Saya')
+@section('subtitle','Kelola informasi profil Anda')
 
 @section('content')
 <div class="min-h-screen">
     <main class="flex-grow bg-white rounded-tl-3xl p-6 md:p-10">
         <div class="max-w-5xl mx-auto">
-            
-            <!-- Page Header -->
-            <div class="mb-8">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-2">
-                            <h1 class="text-3xl font-bold text-slate-800">Profil Saya</h1>
-                            <div class="p-2 bg-blue-50 rounded-lg text-blue-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="text-slate-500">Kelola informasi profil Anda</p>
-                    </div>
-                    <a href="/dashboard" class="px-4 py-2.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition font-medium flex items-center gap-2">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </div>
-            </div>
 
             <!-- Profile Card -->
             <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 mb-6 border border-blue-100">
