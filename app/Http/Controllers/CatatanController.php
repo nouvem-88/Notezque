@@ -51,6 +51,7 @@ class CatatanController extends Controller
     }
 
     // Hapus catatan
+     
     public function destroy($id)
     {
         $note = Auth::user()->notes()->findOrFail($id);

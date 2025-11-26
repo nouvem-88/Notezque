@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -26,15 +27,15 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            
+
             // Update last login
             Auth::user()->update(['last_login_at' => now()]);
-            
+
             // Cek apakah user adalah admin
             if (Auth::user()->is_admin) {
                 return redirect()->route('admin.dashboard');
             }
-            
+
             return redirect()->intended('/dashboard');
         }
 
@@ -91,8 +92,9 @@ class AuthController extends Controller
             return back()->with('error', 'Email tidak ditemukan!');
         }
 
-        // Simpan email untuk proses reset
+        // Simpan email untuk reset
         session(['reset_email' => $request->email]);
+
         return redirect('/change-password')->with('info', 'Email terverifikasi! Silakan ubah kata sandi.');
     }
 
@@ -102,7 +104,7 @@ class AuthController extends Controller
     public function changePasswordPage()
     {
         if (!session()->has('reset_email')) {
-            return redirect('/forgot-password')->with('error', 'Akses ditolak. Harap verifikasi email dulu.');
+            return redirect('/forgot-password')->with('error', 'Harap verifikasi email dulu.');
         }
 
         return view('auth.change-password');
@@ -141,14 +143,12 @@ class AuthController extends Controller
             return redirect('/login');
         }
 
-        // Ambil aktivitas terdekat milik user
         $acaraMendatang = $user->activities()
             ->orderBy('date')
             ->orderBy('time')
             ->take(3)
             ->get();
 
-        // Ambil semua aktivitas untuk kalender
         $semua_aktivitas = $user->activities()
             ->orderBy('date')
             ->get();
@@ -183,5 +183,50 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login')->with('info', 'Kamu sudah logout.');
+    }
+
+    // -------------------------------
+    // UPDATE FOTO PROFIL
+    // -------------------------------
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'profile_photo' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
+        ]);
+
+        $user = Auth::user();
+
+        // Hapus foto lama
+        if ($user->profile_photo && Storage::exists($user->profile_photo)) {
+            Storage::delete($user->profile_photo);
+        }
+
+        // Simpan foto baru
+        $path = $request->file('profile_photo')->store('profile_photos', 'public');
+        
+        // Update database
+        $user->update([
+            'profile_photo' => $path
+        ]);
+
+        return back()->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    // -------------------------------
+    // HAPUS FOTO PROFIL
+    // -------------------------------
+    public function deletePhoto()
+    {
+        $user = Auth::user();
+
+        if ($user->profile_photo && Storage::exists($user->profile_photo)) {
+            Storage::delete($user->profile_photo);
+        }
+
+        $user->update([
+            'profile_photo' => null
+        ]);
+
+        return back()->with('success', 'Foto profil dihapus!');
     }
 }

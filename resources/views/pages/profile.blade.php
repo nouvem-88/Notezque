@@ -31,32 +31,85 @@
             <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 mb-6 border border-blue-100">
                 <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
 
-                    <!-- FOTO PROFIL + UPLOAD -->
-                    <div class="relative group">
-                        <img 
-                            src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : 'https://placehold.co/120x120/6366F1/FFFFFF?text=' . strtoupper(substr($user->name, 0, 1)) }}" 
-                            alt="Profile Picture" 
-                            class="w-32 h-32 rounded-2xl border-4 border-white shadow-xl object-cover"
-                        >
+                    <!-- FOTO PROFIL + MODAL -->
+                    <div x-data="{ open: false }" class="relative">
 
-                        <!-- Hover icon -->
-                        <label for="uploadPhoto" 
-                               class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
-                                      flex items-center justify-center rounded-2xl cursor-pointer transition">
-                            <i data-lucide="camera" class="text-white w-6 h-6"></i>
-                        </label>
+                        <!-- Foto -->
+                        <div 
+                            class="relative group cursor-pointer"
+                            @click="open = true"
+                        >
+                            <img 
+                                src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : 'https://placehold.co/120x120/6366F1/FFFFFF?text=' . strtoupper(substr($user->name, 0, 1)) }}" 
+                                alt="Profile Picture" 
+                                class="w-32 h-32 rounded-2xl border-4 border-white shadow-xl object-cover"
+                            >
+
+                            <!-- Hover icon -->
+                            <div
+                                class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 
+                                       flex items-center justify-center rounded-2xl transition"
+                            >
+                                <i data-lucide="camera" class="text-white w-6 h-6"></i>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div 
+                            x-show="open"
+                            x-transition
+                            class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+                        >
+                            <div class="bg-white rounded-2xl p-6 w-80 shadow-xl">
+
+                                <h2 class="text-lg font-bold text-slate-800 mb-4 text-center">
+                                    Ubah Foto Profil
+                                </h2>
+
+                                <!-- Upload -->
+                                <label 
+                                    for="uploadPhoto"
+                                    class="block w-full text-center bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition cursor-pointer mb-3"
+                                >
+                                    Pilih Foto Baru
+                                </label>
+
+                                <!-- Hapus foto -->
+                                @if ($user->profile_photo)
+                                <form action="{{ route('profile.deletePhoto') }}" method="POST" class="mb-3">
+                                    @csrf
+                                    <button
+                                        type="submit"
+                                        class="w-full bg-red-50 text-red-600 py-2 rounded-lg font-medium hover:bg-red-100 transition"
+                                    >
+                                        Hapus Foto
+                                    </button>
+                                </form>
+                                @endif
+
+                                <!-- Batal -->
+                                <button
+                                    @click="open = false"
+                                    class="w-full bg-slate-100 text-slate-700 py-2 rounded-lg font-medium hover:bg-slate-200 transition"
+                                >
+                                    Batal
+                                </button>
+                            </div>
+                        </div>
+// form kirim file
+                        <form 
+                            action="{{ route('profile.updatePhoto') }}" 
+                            method="POST" 
+                            enctype="multipart/form-data" 
+                            class="hidden"
+                        >
+                            @csrf
+                            <input type="file" id="uploadPhoto" name="profile_photo" accept="image/*"
+                                onchange="this.form.submit()">
+                        </form>
+
                     </div>
 
-                    <!-- Hidden upload form -->
-                    <form 
-                        action="{{ route('profile.updatePhoto') }}" 
-                        method="POST" 
-                        enctype="multipart/form-data" 
-                        class="hidden">
-                        @csrf
-                        <input type="file" id="uploadPhoto" name="profile_photo" accept="image/*"
-                               onchange="this.form.submit()">
-                    </form>
                     <!-- USER INFO -->
                     <div class="flex-1 text-center md:text-left">
                         <h2 class="text-3xl font-bold text-slate-800 mb-2">{{ $user->name }}</h2>
@@ -139,4 +192,5 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof lucide !== 'undefined') lucide.createIcons();
 });
 </script>
+
 @endsection

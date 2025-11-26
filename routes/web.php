@@ -100,3 +100,8 @@ Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])
     ->name('profile.updatePhoto')
     ->middleware('auth');
 
+
+Route::post('/profile/photo', [AuthController::class, 'updatePhoto'])->name('profile.updatePhoto');
+Route::post('/profile/photo/delete', [AuthController::class, 'deletePhoto'])->name('profile.deletePhoto');
+
+
