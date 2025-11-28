@@ -45,7 +45,7 @@ class TaskSeeder extends Seeder
                 'description' => 'Siapkan slide presentasi dan demo aplikasi untuk mata kuliah Rekayasa Perangkat Lunak.',
                 'due_date' => Carbon::now()->addDays(7),
                 'priority' => 'high',
-                'status' => 'in_progress',
+                'status' => 'pending',
                 'completed_at' => null,
             ],
             

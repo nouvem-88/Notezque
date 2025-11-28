@@ -14,8 +14,9 @@ class TugasController extends Controller
         if (!Auth::check()) {
             return redirect('/login');
         }
-
-        $tasks = Auth::user()->tasks()->latest()->get();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $tasks = $user->tasks()->latest()->get();
         $kontenStatis = KontenStatis::pluck('value', 'key');
         return view('pages.kelola-tugas', compact('tasks', 'kontenStatis'));
     }
@@ -28,10 +29,12 @@ class TugasController extends Controller
             'matkul' => 'nullable|string|max:255',
             'tenggat' => 'nullable|date',
             'priority' => 'nullable|in:low,medium,high',
-            'status' => 'nullable|in:pending,selesai',
+            'status' => 'nullable|in:pending,completed',
         ]);
 
-        Auth::user()->tasks()->create([
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $user->tasks()->create([
             'title' => $validated['nama_tugas'],
             'description' => $validated['detail_tugas'] ?? '',
             'due_date' => $validated['tenggat'] ?? now()->addWeek(),
@@ -50,10 +53,12 @@ class TugasController extends Controller
             'matkul' => 'nullable|string|max:255',
             'tenggat' => 'nullable|date',
             'priority' => 'nullable|in:low,medium,high',
-            'status' => 'required|in:pending,selesai',
+            'status' => 'required|in:pending,completed',
         ]);
 
-        $task = Auth::user()->tasks()->findOrFail($id);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $task = $user->tasks()->findOrFail($id);
         
         $data = [
             'title' => $validated['nama_tugas'],
@@ -63,7 +68,7 @@ class TugasController extends Controller
             'status' => $validated['status'],
         ];
 
-        if ($validated['status'] === 'selesai' && !$task->isCompleted()) {
+        if ($validated['status'] === 'completed' && !$task->isCompleted()) {
             $data['completed_at'] = now();
         } elseif ($validated['status'] === 'pending') {
             $data['completed_at'] = null;
@@ -76,7 +81,9 @@ class TugasController extends Controller
 
     public function destroy($id)
     {
-        $task = Auth::user()->tasks()->findOrFail($id);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $task = $user->tasks()->findOrFail($id);
         $task->delete();
 
         return redirect()->back()->with('success', 'Tugas berhasil dihapus');
@@ -84,7 +91,9 @@ class TugasController extends Controller
 
     public function complete($id)
     {
-        $task = Auth::user()->tasks()->findOrFail($id);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $task = $user->tasks()->findOrFail($id);
         $task->markAsCompleted();
 
         return redirect()->back()->with('success', 'Tugas ditandai selesai');

@@ -85,13 +85,13 @@
 
                     <!-- Daftar Folders -->
                     @foreach($folders as $folder)
-                    <div class="grid grid-cols-12 gap-4 items-center p-4 rounded-xl hover:bg-slate-50 cursor-pointer transition">
-                        <div class="col-span-12 md:col-span-5 flex items-center gap-4" onclick="window.location.href='{{ route('materi.index', ['folder' => $folder->id]) }}'">
+                    <div class="grid grid-cols-12 gap-4 items-center p-4 rounded-xl hover:bg-slate-50 transition">
+                        <a href="{{ route('materi.index', ['folder' => $folder->id]) }}" class="col-span-12 md:col-span-5 flex items-center gap-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-{{ $folder->color }}-500 flex-shrink-0">
                                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                             </svg>
                             <span class="font-medium text-slate-700 truncate">{{ $folder->name }}</span>
-                        </div>
+                        </a>
                         <div class="hidden md:block md:col-span-2">
                             <span class="text-sm text-slate-500">{{ $folder->user->name }}</span>
                         </div>
@@ -111,13 +111,13 @@
                                     </svg>
                                 </button>
                                 <div id="folder-{{ $folder->id }}" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 z-10">
-                                    <button onclick="openEditFolderModal({{ $folder->id }}, '{{ $folder->name }}', '{{ $folder->color }}')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center gap-2">
+                                    <button onclick="openEditFolderModal('{{ $folder->id }}', '{{ $folder->name }}', '{{ $folder->color }}')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
                                         </svg>
                                         <span>Rename</span>
                                     </button>
-                                    <button onclick="deleteFolder({{ $folder->id }})" class="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 flex items-center gap-2 rounded-b-lg">
+                                    <button onclick="deleteFolder('{{ $folder->id }}')" class="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 flex items-center gap-2 rounded-b-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M3 6h18"></path>
                                             <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
@@ -160,14 +160,14 @@
                                     </svg>
                                 </button>
                                 <div id="file-{{ $file->id }}" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 z-10">
-                                    <a href="{{ route('materi.file.preview', $file->id) }}" target="_blank" class="block px-4 py-2 hover:bg-slate-50 flex items-center gap-2">
+                                    <a href="{{ route('materi.file.preview', $file->id) }}" target="_blank" class="px-4 py-2 hover:bg-slate-50 flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                             <circle cx="12" cy="12" r="3"></circle>
                                         </svg>
                                         <span>Preview</span>
                                     </a>
-                                    <a href="{{ route('materi.file.download', $file->id) }}" class="block px-4 py-2 hover:bg-slate-50 flex items-center gap-2">
+                                    <a href="{{ route('materi.file.download', $file->id) }}" class="px-4 py-2 hover:bg-slate-50 flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                             <polyline points="7 10 12 15 17 10"></polyline>
@@ -175,13 +175,13 @@
                                         </svg>
                                         <span>Download</span>
                                     </a>
-                                    <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->original_name }}')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center gap-2">
+                                    <button onclick="openRenameFileModal('{{ $file->id }}', '{{ $file->original_name }}')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
                                         </svg>
                                         <span>Rename</span>
                                     </button>
-                                    <button onclick="deleteFile({{ $file->id }})" class="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 flex items-center gap-2 rounded-b-lg">
+                                    <button onclick="deleteFile('{{ $file->id }}')" class="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 flex items-center gap-2 rounded-b-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M3 6h18"></path>
                                             <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
@@ -213,8 +213,9 @@
 </div>
 
 <!-- Modal Create/Edit Folder -->
-<div id="folderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-    <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+<div id="folderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
         <h3 id="folderModalTitle" class="text-xl font-bold text-slate-800 mb-4">Folder Baru</h3>
         <form id="folderForm" onsubmit="submitFolder(event)">
             <input type="hidden" id="folderId" value="">
@@ -243,12 +244,14 @@
                 <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Simpan</button>
             </div>
         </form>
+        </div>
     </div>
 </div>
 
 <!-- Modal Upload File -->
-<div id="uploadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-    <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+<div id="uploadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
         <h3 class="text-xl font-bold text-slate-800 mb-4">Upload File</h3>
         <form id="uploadForm" onsubmit="submitUpload(event)">
             <div class="mb-4">
@@ -261,12 +264,14 @@
                 <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Upload</button>
             </div>
         </form>
+        </div>
     </div>
 </div>
 
 <!-- Modal Rename File -->
-<div id="renameModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-    <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+<div id="renameModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
         <h3 class="text-xl font-bold text-slate-800 mb-4">Rename File</h3>
         <form id="renameForm" onsubmit="submitRename(event)">
             <input type="hidden" id="renameFileId" value="">
@@ -279,6 +284,7 @@
                 <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Simpan</button>
             </div>
         </form>
+        </div>
     </div>
 </div>
 

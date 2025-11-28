@@ -38,7 +38,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-slate-500 font-medium mb-1">Selesai</p>
-                            <p class="text-2xl font-bold text-slate-800">{{ $tasks->where('status', 'selesai')->count() }}</p>
+                            <p class="text-2xl font-bold text-slate-800">{{ $tasks->where('status', 'completed')->count() }}</p>
                         </div>
                         <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                             <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
@@ -94,7 +94,7 @@
                                         @endif
                                     </div>
                                     <div class="flex items-center gap-2 flex-shrink-0">
-                                        @if($task->status !== 'selesai')
+                                        @if($task->status !== 'completed')
                                         <form action="{{ route('tugas.complete', $task->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('PATCH')
@@ -131,8 +131,8 @@
                                     </span>
                                     @endif
 
-                                    <span class="text-xs px-2.5 py-1 rounded-full font-medium {{ $task->status === 'selesai' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
-                                        {{ $task->status === 'selesai' ? 'Completed' : 'In Progress' }}
+                                    <span class="text-xs px-2.5 py-1 rounded-full font-medium {{ $task->status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
+                                        {{ $task->status === 'completed' ? 'Completed' : 'In Progress' }}
                                     </span>
                                 </div>
                             </div>
@@ -209,7 +209,7 @@
                     <select name="status" id="inputStatus"
                         class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option value="pending">Pending</option>
-                        <option value="selesai">Selesai</option>
+                        <option value="completed">Selesai</option>
                     </select>
                 </div>
 
