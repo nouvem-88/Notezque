@@ -1,5 +1,8 @@
 @extends('layouts.main-nav')
 
+@section('title', 'Catatan')
+@section('subtitle', 'Kelola dan atur catatan Anda dengan mudah')
+
 @section('content')
 <div class="min-h-screen">
     <main class="flex-grow bg-white rounded-tl-3xl p-6 md:p-10">

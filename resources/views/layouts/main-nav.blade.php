@@ -594,7 +594,7 @@
                     <div class="nav-text absolute right-3 w-1.5 h-1.5 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </a>
 
-                <!-- Nilai -->
+                <!-- Materi -->
                 <a href="{{ url('/materi') }}" id="nav-grades" class="sidebar-item group relative">
                     <i data-lucide="brain-circuit" class="w-5 h-5 transition-colors shrink-0"></i>
                     <span class="nav-text ml-3 h-5 font-medium">File Materi</span>
@@ -650,15 +650,6 @@
                         <h1 class="text-2xl font-bold text-slate-800">@yield('title', 'Ganti ini')</h1>
                         <p class="text-xs text-slate-500 font-medium mt-0.5">@yield('subtitle', 'Kelola produktivitas Anda')</p>
                         @endif
-                    </div>
-
-                    <!-- Search Bar (Pusat) -->
-                    <div
-                        class="hidden sm:flex flex-1 max-w-md mx-8 items-center bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-sm transition-all duration-300 hover:shadow-md focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100">
-                        <i data-lucide="search" class="w-5 h-5 text-slate-400 mr-3"></i>
-                        <input type="text" placeholder="Cari Tugas, Materi, atau Jadwal..."
-                            class="bg-transparent w-full focus:outline-none text-sm placeholder-slate-400 text-slate-700">
-                        <kbd class="hidden lg:inline-block px-2 py-1 text-xs font-semibold text-slate-500 bg-slate-100 border border-slate-200 rounded-lg">Ctrl+K</kbd>
                     </div>
 
                     <!-- Ikon Notifikasi, Profil, dan Edit (Kanan) -->
@@ -793,10 +784,6 @@
                                 <a href="{{ url('/profile') }}"
                                     class="px-4 py-2 text-sm text-gray-700 hover:bg-v4-light hover:text-v4-primary flex items-center transition duration-150">
                                     <i data-lucide="user" class="w-4 h-4 mr-2"></i> Profil Saya
-                                </a>
-                                <a href="#"
-                                    class="px-4 py-2 text-sm text-gray-700 hover:bg-v4-light hover:text-v4-primary flex items-center transition duration-150">
-                                    <i data-lucide="life-buoy" class="w-4 h-4 mr-2"></i> Bantuan
                                 </a>
                                 <div class="border-t border-gray-100 my-1"></div>
                                 <a href="{{ url('/') }}"
