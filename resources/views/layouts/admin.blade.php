@@ -91,7 +91,8 @@
                                 </div>
 
                                 <div class="border-t border-gray-200 my-2"></div>
-                                <form action="{{ route('logout') }}" method="GET" class="block">
+                                <form action="{{ route('logout') }}" method="POST" class="block">
+                                    @csrf
                                     <button type="submit" class="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                                         <i class="fas fa-sign-out-alt mr-3 w-4"></i>
                                         Keluar

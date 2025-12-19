@@ -195,7 +195,7 @@
                         Roadmap
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-600 to-blue-500 group-hover:w-full transition-all duration-300"></span>
                     </a>
-                    <a href="{{ url('/login') }}" 
+                    <a href="{{ route('akses.sistem') }}" 
                        class="px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
                         Akses Sistem
                         <svg class="inline-block w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,7 +225,7 @@
                 <a href="#pengembangan" class="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-sky-50 hover:text-sky-600 transition-colors">
                     Roadmap
                 </a>
-                <a href="{{ url('/login') }}" 
+                <a href="{{ route('akses.sistem') }}" 
                    class="block px-4 py-3 text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-center mt-3 shadow-md hover:shadow-lg transition-all">
                     Akses Sistem →
                 </a>

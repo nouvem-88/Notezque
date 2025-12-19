@@ -27,6 +27,14 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            // Check if user is blocked
+            if (Auth::user()->blocked) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Akun Anda telah diblokir. Silakan hubungi administrator.',
+                ])->onlyInput('email');
+            }
+
             $request->session()->regenerate();
 
             // Update last login
@@ -104,11 +112,17 @@ class AuthController extends Controller
     // -------------------------------
     public function changePasswordPage()
     {
+        // Jika user sudah login, langsung bisa akses
+        if (Auth::check()) {
+            return view('auth.change-password', ['fromProfile' => true]);
+        }
+
+        // Jika belum login, harus melalui forgot password dulu
         if (!session()->has('reset_email')) {
             return redirect('/forgot-password')->with('error', 'Harap verifikasi email dulu.');
         }
 
-        return view('auth.change-password');
+        return view('auth.change-password', ['fromProfile' => false]);
     }
 
     public function changePassword(Request $request)
@@ -118,6 +132,25 @@ class AuthController extends Controller
             'confirm_password' => 'required|same:new_password',
         ]);
 
+        // Jika user sudah login, ubah password user yang login
+        if (Auth::check()) {
+            $user = Auth::user();
+            
+            // Validasi password lama jika dikirim
+            if ($request->filled('current_password')) {
+                if (!Hash::check($request->current_password, $user->password)) {
+                    return back()->with('error', 'Password saat ini salah!');
+                }
+            }
+
+            $user->update([
+                'password' => Hash::make($request->new_password),
+            ]);
+
+            return redirect()->route('profile')->with('success', 'Kata sandi berhasil diubah!');
+        }
+
+        // Jika melalui forgot password
         $user = User::where('email', session('reset_email'))->first();
 
         if (!$user) {
@@ -187,10 +220,19 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        
+        // Invalidate session dan regenerate token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        
+        // Clear semua session data
+        $request->session()->flush();
 
-        return redirect('/login')->with('info', 'Kamu sudah logout.');
+        // Redirect dengan header no-cache untuk mencegah browser cache
+        return redirect('/login')
+            ->with('info', 'Kamu sudah logout.')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache');
     }
 
     // -------------------------------

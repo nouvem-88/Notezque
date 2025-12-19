@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\{
     LandingController,
     KalenderController,
@@ -21,37 +22,63 @@ use App\Http\Controllers\{
 | Public Routes
 |--------------------------------------------------------------------------
 */
+
+// Landing Page - selalu bisa diakses
 Route::get('/', [LandingController::class, 'index'])->name('landing');
-
-// Login
-Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
-// Register
-Route::get('/register', [AuthController::class, 'registerPage'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
-// Forgot & Change Password
-Route::get('/forgot-password', [AuthController::class, 'forgotPasswordPage'])->name('forgot');
-Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot.post');
-
 Route::get('/change-password', [AuthController::class, 'changePasswordPage'])->name('change');
 Route::post('/change-password', [AuthController::class, 'changePassword'])->name('change.post');
 
-// Konten Statis (Public)
+// Route untuk tombol "Akses Sistem" di landing page
+// Jika sudah login → dashboard, jika belum → login
+Route::get('/akses-sistem', function () {
+    if (Auth::check()) {
+        return Auth::user()->is_admin 
+            ? redirect()->route('admin.dashboard') 
+            : redirect()->route('dashboard');
+    }
+    return redirect()->route('login');
+})->name('akses.sistem')->middleware('web');
+
+/*
+|--------------------------------------------------------------------------
+| Guest Routes (hanya untuk user yang belum login)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('guest')->group(function () {
+    // Login
+    Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+    // Register
+    Route::get('/register', [AuthController::class, 'registerPage'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+    // Forgot & Change Password
+    Route::get('/forgot-password', [AuthController::class, 'forgotPasswordPage'])->name('forgot');
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot.post');
+});
+
+// Konten Statis (Public - bisa diakses siapa saja)
 Route::get('/konten', [KontenStatisController::class, 'index'])->name('konten.index');
 Route::get('/konten/{key}', [KontenStatisController::class, 'show'])->name('konten.show');
 
-// Protected Routes (requires authentication)
+/*
+|--------------------------------------------------------------------------
+| Protected Routes (requires authentication)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
-    // Logout
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Logout - gunakan POST untuk keamanan
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout.get'); // fallback GET
 
     // Dashboard
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
     // Profile
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::post('/profile/photo', [AuthController::class, 'updatePhoto'])->name('profile.updatePhoto');
+    Route::post('/profile/photo/delete', [AuthController::class, 'deletePhoto'])->name('profile.deletePhoto');
 
     // Catatan Routes
     Route::get('/catatan', [CatatanController::class, 'index'])->name('catatan');
@@ -93,7 +120,12 @@ Route::middleware('auth')->group(function () {
         Route::delete('/file/{id}', 'deleteFile')->name('file.delete');
     });
 
-    Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Routes (requires authentication + admin role)
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         // Dashboard Admin
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('home');
@@ -108,15 +140,5 @@ Route::middleware('auth')->group(function () {
         Route::get('statistics', [AdminStatistikController::class, 'index'])->name('statistics');
     });
 });
-
-// profile photo routes
-
-Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])
-    ->name('profile.updatePhoto')
-    ->middleware('auth');
-
-
-Route::post('/profile/photo', [AuthController::class, 'updatePhoto'])->name('profile.updatePhoto');
-Route::post('/profile/photo/delete', [AuthController::class, 'deletePhoto'])->name('profile.deletePhoto');
 
 

@@ -101,7 +101,11 @@
                                 <i data-lucide="sticky-note" class="w-5 h-5 text-purple-600"></i>
                             </div>
                             <div class="flex gap-1">
-                                <button onclick="editNote('{{ $note->id }}', '{{ addslashes($note->title) }}', '{{ addslashes($note->content) }}')"
+                                <button 
+                                    onclick="editNote(this)"
+                                    data-id="{{ $note->id }}"
+                                    data-title="{{ htmlspecialchars($note->title, ENT_QUOTES) }}"
+                                    data-content="{{ htmlspecialchars($note->content, ENT_QUOTES) }}"
                                     class="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition" title="Edit">
                                     <i data-lucide="edit-2" class="w-4 h-4"></i>
                                 </button>
@@ -197,11 +201,15 @@ function closeModal() {
     document.getElementById("modalCatatan").classList.add("hidden");
 }
 
-function editNote(id, judul, isi) {
+function editNote(button) {
+    const id = button.getAttribute('data-id');
+    const title = button.getAttribute('data-title');
+    const content = button.getAttribute('data-content');
+    
     document.getElementById("modalTitle").innerText = "Edit Catatan";
-    document.getElementById("catatanForm").action = "/catatan/edit/" + id;
-    document.getElementById("judul").value = judul;
-    document.getElementById("isi").value = isi;
+    document.getElementById("catatanForm").action = "{{ route('catatan.update', ':id') }}".replace(':id', id);
+    document.getElementById("judul").value = title;
+    document.getElementById("isi").value = content;
     document.getElementById("modalCatatan").classList.remove("hidden");
 }
 </script>

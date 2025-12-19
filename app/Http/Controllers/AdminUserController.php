@@ -29,15 +29,15 @@ class AdminUserController extends Controller
     {
         $data = $req->validate([
             'name' => 'required|string|max:191',
-            'email' => 'required|email|max:191',
+            'email' => 'required|email|max:191|unique:users,email,' . $user->id,
             'is_admin' => 'nullable|boolean',
             'blocked' => 'nullable|boolean'
         ]);
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],
-            'is_admin' => $req->has('is_admin') ? (bool) $req->is_admin : $user->is_admin,
-            'blocked' => $req->has('blocked') ? (bool) $req->blocked : $user->blocked,
+            'is_admin' => $req->has('is_admin') ? (bool) $req->is_admin : false,
+            'blocked' => $req->has('blocked') ? (bool) $req->blocked : false,
         ]);
         return redirect()->route('admin.users.index')->with('success', 'User updated');
     }

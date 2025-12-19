@@ -90,7 +90,7 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                <input type="checkbox" id="select-all" class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Pengguna</th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
@@ -102,15 +102,18 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @forelse($users as $user)
+                        @php
+                            $avatarUrl = $user->profile_photo 
+                                ? asset('storage/' . $user->profile_photo) 
+                                : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=6366F1&color=fff&size=40';
+                        @endphp
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4">
-                                <input type="checkbox" class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                <input type="checkbox" class="user-checkbox w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" data-user-id="{{ $user->id }}">
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
-                                        {{ strtoupper(substr($user->name, 0, 2)) }}
-                                    </div>
+                                    <img src="{{ $avatarUrl }}" alt="{{ $user->name }}" class="w-10 h-10 rounded-full object-cover mr-3">
                                     <div>
                                         <p class="font-semibold text-gray-800">{{ $user->name }}</p>
                                         <p class="text-xs text-gray-500">ID: {{ $user->id }}</p>
@@ -190,4 +193,33 @@
         <span class="font-semibold">{{ session('success') }}</span>
     </div>
     @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAllCheckbox = document.getElementById('select-all');
+            const userCheckboxes = document.querySelectorAll('.user-checkbox');
+            
+            // Select/Deselect all checkboxes
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', function() {
+                    userCheckboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                });
+            }
+            
+            // Update select-all checkbox state when individual checkboxes change
+            userCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const allChecked = Array.from(userCheckboxes).every(cb => cb.checked);
+                    const someChecked = Array.from(userCheckboxes).some(cb => cb.checked);
+                    
+                    if (selectAllCheckbox) {
+                        selectAllCheckbox.checked = allChecked;
+                        selectAllCheckbox.indeterminate = someChecked && !allChecked;
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

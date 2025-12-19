@@ -26,6 +26,7 @@ class User extends Authenticatable
         'password',
         'profile_photo',
         'is_admin',
+        'blocked',
         'last_login_at',
     ];
 
@@ -50,6 +51,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'blocked' => 'boolean',
             'last_login_at' => 'datetime',
         ];
     }

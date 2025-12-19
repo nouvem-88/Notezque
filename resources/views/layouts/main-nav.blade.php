@@ -623,11 +623,14 @@
                     <div class="nav-text absolute right-3 w-1.5 h-1.5 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </button>
 
-                <a href="{{ url('/') }}" class="sidebar-item mt-1.5 group relative hover:bg-red-50 hover:text-red-600">
-                    <i data-lucide="log-out" class="w-5 h-5 transition-colors shrink-0"></i>
-                    <span class="nav-text ml-3 h-5 font-medium">Logout</span>
-                    <div class="nav-text absolute right-3 w-1.5 h-1.5 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </a>
+                <form action="{{ route('logout') }}" method="POST" class="mt-1.5">
+                    @csrf
+                    <button type="submit" class="sidebar-item w-full group relative hover:bg-red-50 hover:text-red-600">
+                        <i data-lucide="log-out" class="w-5 h-5 transition-colors shrink-0"></i>
+                        <span class="nav-text ml-3 h-5 font-medium">Logout</span>
+                        <div class="nav-text absolute right-3 w-1.5 h-1.5 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </button>
+                </form>
             </div>
         </aside>
 
@@ -786,10 +789,12 @@
                                     <i data-lucide="user" class="w-4 h-4 mr-2"></i> Profil Saya
                                 </a>
                                 <div class="border-t border-gray-100 my-1"></div>
-                                <a href="{{ url('/') }}"
-                                    class="px-4 py-2 text-sm text-red-500 hover:bg-red-50 flex items-center transition duration-150">
-                                    <i data-lucide="log-out" class="w-4 h-4 mr-2"></i> Keluar
-                                </a>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 flex items-center transition duration-150">
+                                        <i data-lucide="log-out" class="w-4 h-4 mr-2"></i> Keluar
+                                    </button>
+                                </form>
                             </div>
                         </div>
 

@@ -16,15 +16,26 @@
 
     <!-- Register Card -->
     <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-10">
-      <form action="{{ url('/login') }}" method="GET" class="space-y-6">
+      <form action="{{ route('register.post') }}" method="POST" class="space-y-6">
+        @csrf
         
+        @if ($errors->any())
+        <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+          <ul class="list-disc list-inside">
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+        @endif
+
         <div>
           <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <i data-lucide="user" class="w-5 h-5 text-slate-400"></i>
             </div>
-            <input type="text" name="name" required 
+            <input type="text" name="name" required value="{{ old('name') }}"
               class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-shadow" 
               placeholder="Masukkan nama lengkap">
           </div>
@@ -36,7 +47,7 @@
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <i data-lucide="mail" class="w-5 h-5 text-slate-400"></i>
             </div>
-            <input type="email" name="email" required 
+            <input type="email" name="email" required value="{{ old('email') }}"
               class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-shadow" 
               placeholder="nama@email.com">
           </div>
@@ -50,9 +61,20 @@
             </div>
             <input type="password" name="password" required 
               class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-shadow" 
-              placeholder="Minimal 8 karakter">
+              placeholder="Minimal 6 karakter">
           </div>
-          <p class="mt-2 text-xs text-slate-500">Gunakan minimal 8 karakter dengan kombinasi huruf dan angka</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Konfirmasi Kata Sandi</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i data-lucide="lock" class="w-5 h-5 text-slate-400"></i>
+            </div>
+            <input type="password" name="password_confirmation" required 
+              class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-shadow" 
+              placeholder="Ulangi kata sandi">
+          </div>
         </div>
 
         <div class="flex items-start pt-2">

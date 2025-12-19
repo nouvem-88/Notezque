@@ -79,16 +79,16 @@
                     Hak Akses & Status
                 </label>
                 <div class="space-y-3">
-                    <!-- Admin Status -->
+                    <!-- Admin Access -->
                     <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                         <input type="checkbox" 
                                name="is_admin" 
                                value="1"
-                               {{ old('is_admin', $user->is_admin) ? 'checked' : '' }}
-                               class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                               {{ old('is_admin', $user->is_admin ?? false) ? 'checked' : '' }}
+                               class="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
                         <div class="ml-3">
-                            <span class="text-sm font-semibold text-gray-800">Admin</span>
-                            <p class="text-xs text-gray-500">User memiliki akses ke dashboard admin</p>
+                            <span class="text-sm font-semibold text-gray-800">Admin Access</span>
+                            <p class="text-xs text-gray-500">User memiliki akses ke admin panel</p>
                         </div>
                     </label>
 

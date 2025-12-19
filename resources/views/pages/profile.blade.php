@@ -76,7 +76,6 @@
                                 </button>
                             </div>
                         </div>
-// form kirim file
                         <form 
                             action="{{ route('profile.updatePhoto') }}" 
                             method="POST" 
@@ -157,10 +156,13 @@
                         <i data-lucide="lock" class="w-4 h-4"></i>
                         <span>Ganti Kata Sandi</span>
                     </a>
-                    <a href="/logout" class="px-5 py-2.5 bg-red-50 text-red-600 rounded-lg font-medium hover:bg-red-100 transition flex items-center gap-2">
-                        <i data-lucide="log-out" class="w-4 h-4"></i>
-                        <span>Keluar</span>
-                    </a>
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="px-5 py-2.5 bg-red-50 text-red-600 rounded-lg font-medium hover:bg-red-100 transition flex items-center gap-2">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                            <span>Keluar</span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

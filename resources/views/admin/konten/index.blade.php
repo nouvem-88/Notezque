@@ -81,11 +81,22 @@
                             <i class="fas fa-clock mr-1"></i>
                             Update: {{ $item->updated_at ? $item->updated_at->diffForHumans() : '-' }}
                         </p>
-                        <a href="{{ route('admin.content.edit', $item->id) }}" 
-                           class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold">
-                            <i class="fas fa-edit mr-1"></i>
-                            Edit
-                        </a>
+                        <div class="flex items-center space-x-2">
+                            <a href="{{ route('admin.content.edit', $item->id) }}" 
+                               class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold">
+                                <i class="fas fa-edit mr-1"></i>
+                                Edit
+                            </a>
+                            <form action="{{ route('admin.content.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus konten ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-semibold">
+                                    <i class="fas fa-trash mr-1"></i>
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
