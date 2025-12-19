@@ -11,7 +11,6 @@ class Note extends Model
         'user_id',
         'title',
         'content',
-        'category',
     ];
 
     protected $casts = [

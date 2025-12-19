@@ -25,22 +25,18 @@ class NoteSeeder extends Seeder
             [
                 'title' => 'Catatan Kuliah Pemrograman Web',
                 'content' => "# Laravel Framework\n\n- MVC Pattern\n- Eloquent ORM\n- Blade Templating\n- Routing System\n- Middleware\n\n## Tugas Minggu Ini:\n- Buat CRUD sederhana\n- Deploy ke hosting",
-                'category' => 'kuliah',
             ],
             [
                 'title' => 'Ide Proyek Akhir Semester',
                 'content' => "Aplikasi Manajemen Tugas untuk Mahasiswa\n\nFitur:\n- Dashboard analytics\n- Kalender akademik\n- Reminder otomatis\n- Kolaborasi kelompok\n- Export data",
-                'category' => 'kuliah',
             ],
             [
                 'title' => 'Catatan Database',
                 'content' => "# Normalisasi Database\n\n1NF - Atomic values\n2NF - No partial dependency\n3NF - No transitive dependency\n\nContoh:\nMahasiswa(id, nama, nim)\nMatakuliah(id, kode, nama)\nNilai(mahasiswa_id, matakuliah_id, nilai)",
-                'category' => 'kuliah',
             ],
             [
                 'title' => 'Daftar Buku Bacaan',
                 'content' => "Buku yang harus dibaca:\n\n1. Clean Code - Robert C. Martin\n2. Design Patterns - Gang of Four\n3. The Pragmatic Programmer\n4. Laravel Up & Running - Matt Stauffer",
-                'category' => 'personal',
             ],
         ];
 

@@ -23,13 +23,11 @@ class CatatanController extends Controller
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'isi' => 'nullable|string',
-            'category' => 'nullable|string',
         ]);
 
         Auth::user()->notes()->create([
             'title' => $validated['judul'],
             'content' => $validated['isi'] ?? '',
-            'category' => $validated['category'] ?? 'personal',
         ]);
 
         return redirect('/catatan')->with('success', 'Catatan berhasil ditambahkan!');
